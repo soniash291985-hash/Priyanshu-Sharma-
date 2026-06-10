@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Calculator</title>
+
+<style>
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    max-width:450px;
+    margin:auto;
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+}
+
+input{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:15px;
+    font-size:18px;
+}
+
+a{
+    color:#28a745;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⚖️ BMI Calculator</h1>
+
+<input
+type="number"
+id="weight"
+placeholder="Weight (kg)">
+
+<input
+type="number"
+id="height"
+placeholder="Height (cm)">
+
+<button onclick="calculateBMI()">
+Calculate BMI
+</button>
+
+<div class="result" id="result"></div>
+
+<br><br>
+
+<a href="index.html">⬅ Back to Home</a>
+
+</div>
+
+<script>
+
+function calculateBMI(){
+
+    let weight =
+    parseFloat(
+    document.getElementById("weight").value
+    );
+
+    let heightCm =
+    parseFloat(
+    document.getElementById("height").value
+    );
+
+    if(!weight || !heightCm){
+
+        document.getElementById("result")
+        .innerHTML =
+        "Please enter all values";
+
+        return;
+    }
+
+    let height = heightCm / 100;
+
+    let bmi =
+    weight / (height * height);
+
+    let category = "";
+
+    if(bmi < 18.5){
+        category = "🔵 Underweight";
+    }
+    else if(bmi < 25){
+        category = "🟢 Normal Weight";
+    }
+    else if(bmi < 30){
+        category = "🟠 Overweight";
+    }
+    else{
+        category = "🔴 Obese";
+    }
+
+    let minHealthy =
+    (18.5 * height * height)
+    .toFixed(1);
+
+    let maxHealthy =
+    (24.9 * height * height)
+    .toFixed(1);
+
+    document.getElementById("result")
+    .innerHTML =
+
+    "<b>Your BMI:</b> "
+    + bmi.toFixed(1)
+
+    + "<br><br><b>Category:</b> "
+    + category
+
+    + "<br><br><b>Healthy Weight Range:</b><br>"
+    + minHealthy
+    + " kg - "
+    + maxHealthy
+    + " kg"
+
+    + "<br><br><b>BMI Ranges:</b><br>"
+    + "Underweight: Below 18.5<br>"
+    + "Normal: 18.5 - 24.9<br>"
+    + "Overweight: 25 - 29.9<br>"
+    + "Obese: 30+";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calorie Calculator</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#121212;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    max-width:450px;
+    margin:auto;
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+}
+
+input, select{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:15px;
+    font-size:18px;
+}
+
+a{
+    color:#28a745;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🔥 Calorie Calculator</h1>
+
+    <input type="number" id="age" placeholder="Age">
+
+    <input type="number" id="weight" placeholder="Weight (kg)">
+
+    <input type="number" id="height" placeholder="Height (cm)">
+
+    <select id="activity">
+        <option value="1.2">Sedentary</option>
+        <option value="1.375">Light Exercise</option>
+        <option value="1.55">Moderate Exercise</option>
+        <option value="1.725">Heavy Exercise</option>
+    </select>
+
+    <button onclick="calculateCalories()">
+        Calculate
+    </button>
+
+    <div class="result" id="result"></div>
+
+    <br><br>
+
+    <a href="index.html">⬅ Back to Home</a>
+</div>
+
+<script>
+function calculateCalories(){
+
+    let weight =
+    parseFloat(document.getElementById("weight").value);
+
+    let height =
+    parseFloat(document.getElementById("height").value);
+
+    let age =
+    parseFloat(document.getElementById("age").value);
+
+    let activity =
+    parseFloat(document.getElementById("activity").value);
+
+    if(!weight || !height || !age){
+        document.getElementById("result").innerHTML =
+        "Please fill all fields";
+        return;
+    }
+
+    let bmr =
+    (10 * weight) +
+    (6.25 * height) -
+    (5 * age) + 5;
+
+    let maintenance =
+    Math.round(bmr * activity);
+
+    let bulk =
+    maintenance + 300;
+
+    let cut =
+    maintenance - 300;
+
+    document.getElementById("result").innerHTML =
+    "<p>Maintenance: <b>" + maintenance + " kcal</b></p>" +
+    "<p>Bulking: <b>" + bulk + " kcal</b></p>" +
+    "<p>Cutting: <b>" + cut + " kcal</b></p>";
+}
+</script>
+
+</body>
+</html>

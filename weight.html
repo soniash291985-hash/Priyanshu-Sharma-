@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight Tracker</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
+}
+
+.card{
+    background:#222;
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+    border-radius:12px;
+}
+
+input{
+    width:80%;
+    padding:10px;
+    margin:10px;
+    border:none;
+    border-radius:5px;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+#display{
+    text-align:left;
+    margin-top:15px;
+}
+
+canvas{
+    background:white;
+    border-radius:10px;
+    margin-top:20px;
+}
+
+a{
+    color:#28a745;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>📈 Weight Tracker</h1>
+
+<input
+type="number"
+id="weight"
+placeholder="Enter Weight (kg)">
+
+<br>
+
+<button onclick="saveWeight()">
+Save Weight
+</button>
+
+<button onclick="clearHistory()">
+Clear History
+</button>
+
+<h3>Weight History</h3>
+
+<div id="display"></div>
+
+<canvas id="weightChart"></canvas>
+
+<br><br>
+
+<a href="index.html">
+⬅ Back to Home
+</a>
+
+</div>
+
+<script>
+
+let weights =
+JSON.parse(
+localStorage.getItem("weights")
+) || [];
+
+let chart;
+
+function saveWeight(){
+
+    let weight =
+    document.getElementById("weight").value;
+
+    if(weight===""){
+        alert("Enter weight");
+        return;
+    }
+
+    weights.push(Number(weight));
+
+    localStorage.setItem(
+        "weights",
+        JSON.stringify(weights)
+    );
+
+    document.getElementById("weight").value="";
+
+    showHistory();
+    updateChart();
+}
+
+function showHistory(){
+
+    let output="";
+
+    if(weights.length===0){
+        output="No weights saved.";
+    }
+    else{
+
+        for(let i=0;i<weights.length;i++){
+
+            output +=
+            (i+1)+". "+
+            weights[i]+" kg<br>";
+        }
+    }
+
+    document.getElementById("display")
+    .innerHTML=output;
+}
+
+function clearHistory(){
+
+    localStorage.removeItem("weights");
+
+    weights=[];
+
+    showHistory();
+    updateChart();
+}
+
+function updateChart(){
+
+    let labels=[];
+
+    for(let i=0;i<weights.length;i++){
+        labels.push("Entry "+(i+1));
+    }
+
+    if(chart){
+        chart.destroy();
+    }
+
+    const ctx =
+    document.getElementById("weightChart");
+
+    chart = new Chart(ctx, {
+
+        type:'line',
+
+        data:{
+            labels:labels,
+
+            datasets:[{
+                label:'Weight (kg)',
+                data:weights,
+                borderWidth:3,
+                fill:false
+            }]
+        },
+
+        options:{
+            responsive:true
+        }
+
+    });
+}
+
+window.onload=function(){
+
+    showHistory();
+
+    updateChart();
+}
+
+</script>
+
+</body>
+</html>

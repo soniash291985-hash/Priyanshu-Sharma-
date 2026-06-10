@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitTrack Pro</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Segoe UI,sans-serif;
+background:linear-gradient(135deg,#0f172a,#111827);
+color:white;
+min-height:100vh;
+}
+
+header{
+text-align:center;
+padding:30px 20px;
+animation:fadeIn 1s ease;
+}
+
+header h1{
+font-size:42px;
+font-weight:800;
+
+background:linear-gradient(
+90deg,
+#a855f7,
+#06b6d4,
+#22d3ee
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+text-shadow:
+0 0 15px rgba(168,85,247,0.5),
+0 0 25px rgba(6,182,212,0.5);
+
+letter-spacing:1px;
+}
+
+header p{
+color:#cbd5e1;
+margin-top:10px;
+}
+
+.hero{
+text-align:center;
+padding:10px 20px 25px;
+}
+
+.hero img{
+width:220px;
+border-radius:20px;
+animation:float 3s ease-in-out infinite;
+
+border:3px solid #00e5ff;
+
+box-shadow:
+0 0 15px #00e5ff,
+0 0 30px rgba(0,229,255,0.5);
+}
+
+.container{
+padding:20px;
+max-width:700px;
+margin:auto;
+}
+
+.welcome-card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+
+padding:20px;
+border-radius:20px;
+
+margin-bottom:20px;
+
+border:2px solid #00e5ff;
+
+box-shadow:
+0 0 10px #00e5ff,
+0 0 25px rgba(0,229,255,0.4);
+
+animation:slideUp 0.8s ease;
+}
+
+.welcome-card h2{
+margin-bottom:10px;
+color:#00e5ff;
+}
+
+.btn{
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+
+padding:18px 20px;
+margin:14px 0;
+
+border-radius:18px;
+
+border:2px solid #00e5ff;
+
+text-decoration:none;
+color:white;
+
+font-size:18px;
+font-weight:600;
+
+box-shadow:
+0 0 10px #00e5ff,
+0 0 20px rgba(0,229,255,0.3);
+
+transition:all 0.3s ease;
+
+animation:slideUp 0.8s ease;
+}
+
+.btn:hover{
+
+transform:
+translateY(-5px)
+scale(1.02);
+
+background:
+rgba(255,255,255,0.12);
+
+box-shadow:
+0 0 20px #00e5ff,
+0 0 40px #00e5ff,
+0 0 60px rgba(0,229,255,0.7);
+}
+
+.arrow{
+font-size:22px;
+color:#00e5ff;
+}
+
+footer{
+text-align:center;
+padding:25px;
+color:#94a3b8;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+}
+to{
+opacity:1;
+}
+}
+
+@keyframes slideUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes float{
+0%{
+transform:translateY(0);
+}
+50%{
+transform:translateY(-12px);
+}
+100%{
+transform:translateY(0);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>💪 FitTrack Pro</h1>
+<p>Your Complete Fitness Companion</p>
+</header>
+
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600" alt="Fitness">
+</div>
+
+<div class="container">
+
+<div class="welcome-card">
+<h2>🚀 Welcome</h2>
+<p>
+Track your BMI, calories, workouts,
+diet plans, weight progress and water intake
+all in one place.
+</p>
+</div>
+
+<a class="btn" href="bmi.html">
+<span>⚖️ BMI Calculator</span>
+<span class="arrow">➜</span>
+</a>
+
+<a class="btn" href="calories.html">
+<span>🔥 Calorie Calculator</span>
+<span class="arrow">➜</span>
+</a>
+
+<a class="btn" href="workout.html">
+<span>🏋️ Workout Planner</span>
+<span class="arrow">➜</span>
+</a>
+
+<a class="btn" href="diet.html">
+<span>🍽️ Diet Planner</span>
+<span class="arrow">➜</span>
+</a>
+
+<a class="btn" href="weight.html">
+<span>📈 Weight Tracker</span>
+<span class="arrow">➜</span>
+</a>
+
+<a class="btn" href="water.html">
+<span>💧 Water Tracker</span>
+<span class="arrow">➜</span>
+</a>
+
+</div>
+
+<footer>
+FitTrack Pro © 2026
+</footer>
+
+</body>
+</html>

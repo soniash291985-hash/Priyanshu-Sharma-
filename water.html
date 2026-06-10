@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Tracker</title>
+
+<style>
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
+}
+
+.card{
+    background:#222;
+    max-width:450px;
+    margin:auto;
+    padding:20px;
+    border-radius:12px;
+}
+
+button{
+    padding:12px 20px;
+    margin:10px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:5px;
+}
+
+a{
+    color:#28a745;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>💧 Water Tracker</h1>
+
+<h2 id="count">0 Glasses</h2>
+
+<button onclick="addWater()">+1 Glass</button>
+
+<button onclick="resetWater()">Reset</button>
+
+<br><br>
+
+<a href="index.html">⬅ Back to Home</a>
+
+</div>
+
+<script>
+
+let water =
+parseInt(localStorage.getItem("water")) || 0;
+
+function updateDisplay(){
+    document.getElementById("count").innerHTML =
+    water + " Glasses";
+}
+
+function addWater(){
+    water++;
+    localStorage.setItem("water", water);
+    updateDisplay();
+}
+
+function resetWater(){
+    water = 0;
+    localStorage.setItem("water", water);
+    updateDisplay();
+}
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>
