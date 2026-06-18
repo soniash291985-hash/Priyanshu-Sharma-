@@ -1,65 +1,620 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Workout Planner</title>
+<meta name="description" content="Pick a 3-day or 6-day split, follow each session, and watch the rep animation for every exercise — FitTrack Pro.">
+<meta name="theme-color" content="#121214">
+<title>Workout Planner — FitTrack Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+  --bg:#121214;
+  --bg-soft:#1a1b1f;
+  --surface:#1c1e23;
+  --surface-strong:#22242b;
+  --border:#2b2e35;
+  --border-strong:#3a3e48;
+  --accent:#ff4b2b;
+  --accent-light:#ff7a57;
+  --accent-soft:rgba(255,75,43,0.12);
+  --accent-border:rgba(255,75,43,0.45);
+  --text:#f5f3ef;
+  --text-muted:#a3a5ac;
+  --text-faint:#6c6e76;
+  --radius:12px;
+  --nav-h:68px;
+
+  --m-back:#4d8cff;
+  --m-biceps:#a78bfa;
+  --m-chest:#ff7a57;
+  --m-triceps:#34d399;
+  --m-legs:#f5b942;
+  --m-shoulders:#f472b6;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
 body{
-    background:#121212;
-    color:white;
-    font-family:Arial;
-    padding:20px;
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.55;
+  overflow-x:hidden;
 }
 
-.card{
-    background:#222;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
+a{ color:inherit; }
+button{ font-family:inherit; }
+
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+.wrap.narrow{ max-width:600px; }
+
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
+
+/* ---------- navbar ---------- */
+.navbar{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(18,18,20,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; }
+.brand{ display:inline-flex; align-items:center; gap:10px; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
+
+.nav-cta{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- page head ---------- */
+.page-head{ text-align:center; padding:44px 24px 6px; animation:slideUp 0.6s ease both; }
+.page-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:46px; height:46px; border-radius:12px;
+  background:var(--accent-soft); font-size:20px; margin-bottom:14px;
+}
+.eyebrow{
+  display:inline-block; font-family:'Oswald',sans-serif; font-size:0.74rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+}
+.page-head h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:10px; }
+.page-sub{ color:var(--text-muted); font-size:0.95rem; max-width:460px; margin:0 auto; }
+
+/* ---------- split toggle ---------- */
+.option-section{ padding:24px 0 4px; text-align:center; }
+
+.toggle-row{
+  display:flex; background:var(--bg-soft); border:1px solid var(--border);
+  border-radius:999px; padding:4px; margin:0 auto 16px; max-width:300px;
+}
+.toggle-btn{
+  flex:1; background:transparent; border:none; color:var(--text-muted);
+  font-size:0.85rem; font-weight:600; padding:10px 8px;
+  border-radius:999px; cursor:pointer; transition:background 0.2s ease, color 0.2s ease;
+}
+.toggle-btn.active{ background:var(--accent); color:#15151a; }
+
+.option-note{
+  color:var(--text-muted); font-size:0.92rem; max-width:520px; margin:0 auto 18px;
 }
 
-a{
-    color:#28a745;
-    text-decoration:none;
+.muscle-legend{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px 16px;
+  font-size:0.76rem; color:var(--text-muted); margin-bottom:6px;
 }
+.muscle-legend span{ display:inline-flex; align-items:center; }
+.dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+.dot-back{ background:var(--m-back); }
+.dot-biceps{ background:var(--m-biceps); }
+.dot-chest{ background:var(--m-chest); }
+.dot-triceps{ background:var(--m-triceps); }
+.dot-legs{ background:var(--m-legs); }
+.dot-shoulders{ background:var(--m-shoulders); }
+
+/* ---------- day tabs ---------- */
+.day-tabs-section{ padding:8px 0 4px; }
+.day-tabs{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:20px; }
+.day-tab{
+  background:var(--bg-soft); border:1px solid var(--border); color:var(--text-muted);
+  font-size:0.82rem; font-weight:600; padding:9px 18px; border-radius:999px; cursor:pointer;
+  transition:background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.day-tab.active{ background:var(--accent); color:#15151a; border-color:var(--accent); }
+.day-tab:hover:not(.active){ border-color:var(--accent-border); color:var(--text); }
+
+/* ---------- day content ---------- */
+.day-section{ padding:0 0 16px; }
+.day-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:20px;
+  padding:24px 20px; animation:slideUp 0.5s ease both;
+}
+.day-card-head{ margin-bottom:16px; }
+.day-card-head h2{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1.25rem; margin-bottom:4px; }
+.day-card-head p{ color:var(--text-muted); font-size:0.88rem; }
+
+.list-controls{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  margin-bottom:12px;
+}
+.list-count{ font-size:0.78rem; color:var(--text-faint); }
+.anim-toggle{
+  background:none; border:1px solid var(--border-strong); color:var(--text-muted);
+  border-radius:999px; padding:7px 14px; font-size:0.78rem; font-weight:600; cursor:pointer;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.anim-toggle:hover{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- exercise cards ---------- */
+.exercise-card{
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  background:var(--surface-strong); border:1px solid var(--border); border-radius:var(--radius);
+  padding:12px 14px; margin-bottom:10px;
+}
+.ex-icon{
+  flex-shrink:0; width:58px; height:58px; border-radius:12px;
+  background:var(--bg-soft); display:flex; align-items:center; justify-content:center;
+  padding:8px; overflow:visible;
+}
+.ex-icon svg{ width:100%; height:100%; overflow:visible; }
+.ex-icon .ex-head{ fill:none; stroke:currentColor; stroke-width:5; }
+.ex-icon line{ stroke:currentColor; stroke-width:5; stroke-linecap:round; fill:none; }
+
+.ex-info{ flex:1; min-width:130px; }
+.ex-name{ font-weight:600; font-size:0.96rem; margin-bottom:2px; }
+.ex-sets{ font-size:0.82rem; color:var(--text-muted); }
+
+.ex-tag{
+  font-size:0.66rem; font-weight:600; text-transform:uppercase; letter-spacing:0.4px;
+  padding:5px 10px; border-radius:999px; white-space:nowrap; flex-shrink:0;
+}
+.tag-back{ background:rgba(77,140,255,0.15); color:var(--m-back); border:1px solid rgba(77,140,255,0.35); }
+.tag-biceps{ background:rgba(167,139,250,0.15); color:var(--m-biceps); border:1px solid rgba(167,139,250,0.35); }
+.tag-chest{ background:rgba(255,122,87,0.15); color:var(--m-chest); border:1px solid rgba(255,122,87,0.35); }
+.tag-triceps{ background:rgba(52,211,153,0.15); color:var(--m-triceps); border:1px solid rgba(52,211,153,0.35); }
+.tag-legs{ background:rgba(245,185,66,0.15); color:var(--m-legs); border:1px solid rgba(245,185,66,0.35); }
+.tag-shoulders{ background:rgba(244,114,182,0.15); color:var(--m-shoulders); border:1px solid rgba(244,114,182,0.35); }
+
+.muscle-back{ color:var(--m-back); }
+.muscle-biceps{ color:var(--m-biceps); }
+.muscle-chest{ color:var(--m-chest); }
+.muscle-triceps{ color:var(--m-triceps); }
+.muscle-legs{ color:var(--m-legs); }
+.muscle-shoulders{ color:var(--m-shoulders); }
+
+/* ---------- rest day card ---------- */
+.rest-card{
+  display:flex; align-items:flex-start; gap:14px;
+  background:var(--surface); border:1px dashed var(--border-strong); border-radius:var(--radius);
+  padding:18px; margin-top:16px;
+}
+.rest-icon{ font-size:24px; flex-shrink:0; }
+.rest-card h3{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1rem; margin-bottom:4px; }
+.rest-card p{ color:var(--text-muted); font-size:0.88rem; }
+
+.disclaimer-section{ padding:8px 0 50px; text-align:center; }
+.disclaimer{ font-size:0.78rem; color:var(--text-faint); max-width:540px; margin:0 auto; }
+
+/* ---------- footer ---------- */
+footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
+.footer-inner{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; color:var(--text-faint); font-size:0.85rem; }
+.footer-brand{ display:inline-flex; align-items:center; gap:8px; color:var(--text-muted); font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; }
+.footer-brand svg{ color:var(--accent); }
+@media (min-width:768px){ .footer-inner{ flex-direction:row; justify-content:space-between; text-align:left; } }
+
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+
+/* ---------- exercise rep animations ---------- */
+@keyframes curlL{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-125deg); } }
+@keyframes curlR{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(125deg); } }
+@keyframes tricL{ 0%,100%{ transform:rotate(-100deg); } 50%{ transform:rotate(-15deg); } }
+@keyframes tricR{ 0%,100%{ transform:rotate(100deg); } 50%{ transform:rotate(15deg); } }
+@keyframes pressChestL{ 0%,100%{ transform:rotate(-85deg); } 50%{ transform:rotate(-30deg); } }
+@keyframes pressChestR{ 0%,100%{ transform:rotate(85deg); } 50%{ transform:rotate(30deg); } }
+@keyframes rowL{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(55deg); } }
+@keyframes rowR{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-55deg); } }
+@keyframes pullVertL{ 0%,100%{ transform:rotate(-160deg); } 50%{ transform:rotate(-5deg); } }
+@keyframes pullVertR{ 0%,100%{ transform:rotate(160deg); } 50%{ transform:rotate(5deg); } }
+@keyframes pressOverheadL{ 0%,100%{ transform:rotate(20deg); } 50%{ transform:rotate(-150deg); } }
+@keyframes pressOverheadR{ 0%,100%{ transform:rotate(-20deg); } 50%{ transform:rotate(150deg); } }
+@keyframes flyL{ 0%,100%{ transform:rotate(-70deg); } 50%{ transform:rotate(10deg); } }
+@keyframes flyR{ 0%,100%{ transform:rotate(70deg); } 50%{ transform:rotate(-10deg); } }
+@keyframes lateralL{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-80deg); } }
+@keyframes lateralR{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(80deg); } }
+@keyframes hingeBody{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(35deg); } }
+@keyframes squatBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(9px); } }
+@keyframes calfBob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+@keyframes legExtL{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-70deg); } }
+@keyframes legExtR{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(70deg); } }
+
+.anim-curl .ex-armL-lower{ transform-origin:36px 44px; animation:curlL 1.3s ease-in-out infinite; }
+.anim-curl .ex-armR-lower{ transform-origin:64px 44px; animation:curlR 1.3s ease-in-out infinite; }
+
+.anim-triceps .ex-armL-lower{ transform-origin:36px 44px; animation:tricL 1.3s ease-in-out infinite; }
+.anim-triceps .ex-armR-lower{ transform-origin:64px 44px; animation:tricR 1.3s ease-in-out infinite; }
+
+.anim-presschest .ex-armL-lower{ transform-origin:36px 44px; animation:pressChestL 1.4s ease-in-out infinite; }
+.anim-presschest .ex-armR-lower{ transform-origin:64px 44px; animation:pressChestR 1.4s ease-in-out infinite; }
+
+.anim-row .ex-armL-upper, .anim-row .ex-armL-lower{ transform-origin:50px 30px; animation:rowL 1.5s ease-in-out infinite; }
+.anim-row .ex-armR-upper, .anim-row .ex-armR-lower{ transform-origin:50px 30px; animation:rowR 1.5s ease-in-out infinite; }
+
+.anim-pullvert .ex-armL-upper, .anim-pullvert .ex-armL-lower{ transform-origin:50px 30px; animation:pullVertL 1.6s ease-in-out infinite; }
+.anim-pullvert .ex-armR-upper, .anim-pullvert .ex-armR-lower{ transform-origin:50px 30px; animation:pullVertR 1.6s ease-in-out infinite; }
+
+.anim-pressoverhead .ex-armL-upper, .anim-pressoverhead .ex-armL-lower{ transform-origin:50px 30px; animation:pressOverheadL 1.6s ease-in-out infinite; }
+.anim-pressoverhead .ex-armR-upper, .anim-pressoverhead .ex-armR-lower{ transform-origin:50px 30px; animation:pressOverheadR 1.6s ease-in-out infinite; }
+
+.anim-fly .ex-armL-upper, .anim-fly .ex-armL-lower{ transform-origin:50px 30px; animation:flyL 1.5s ease-in-out infinite; }
+.anim-fly .ex-armR-upper, .anim-fly .ex-armR-lower{ transform-origin:50px 30px; animation:flyR 1.5s ease-in-out infinite; }
+
+.anim-lateral .ex-armL-upper, .anim-lateral .ex-armL-lower{ transform-origin:50px 30px; animation:lateralL 1.4s ease-in-out infinite; }
+.anim-lateral .ex-armR-upper, .anim-lateral .ex-armR-lower{ transform-origin:50px 30px; animation:lateralR 1.4s ease-in-out infinite; }
+
+.anim-hinge .ex-head, .anim-hinge .ex-torso, .anim-hinge .ex-armL-upper, .anim-hinge .ex-armL-lower, .anim-hinge .ex-armR-upper, .anim-hinge .ex-armR-lower{
+  transform-origin:50px 56px; animation:hingeBody 1.8s ease-in-out infinite;
+}
+
+.anim-squat .ex-head, .anim-squat .ex-torso, .anim-squat .ex-armL-upper, .anim-squat .ex-armL-lower,
+.anim-squat .ex-armR-upper, .anim-squat .ex-armR-lower, .anim-squat .ex-legL-upper, .anim-squat .ex-legL-lower,
+.anim-squat .ex-legR-upper, .anim-squat .ex-legR-lower{
+  animation:squatBob 1.8s ease-in-out infinite;
+}
+
+.anim-calf .ex-head, .anim-calf .ex-torso, .anim-calf .ex-armL-upper, .anim-calf .ex-armL-lower,
+.anim-calf .ex-armR-upper, .anim-calf .ex-armR-lower, .anim-calf .ex-legL-upper, .anim-calf .ex-legL-lower,
+.anim-calf .ex-legR-upper, .anim-calf .ex-legR-lower{
+  animation:calfBob 1s ease-in-out infinite;
+}
+
+.anim-legext .ex-legL-lower{ transform-origin:42px 76px; animation:legExtL 1.3s ease-in-out infinite; }
+.anim-legext .ex-legR-lower{ transform-origin:58px 76px; animation:legExtR 1.3s ease-in-out infinite; }
+
+body.anim-paused .ex-icon *{ animation-play-state:paused !important; }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>🏋️ Workout Planner</h1>
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="14" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
+    </div>
+    <a class="nav-cta" href="index.html">&#8592; Back to Home</a>
+  </div>
+</header>
 
-<div class="card">
-<h2>Monday - Push</h2>
-<p>Bench Press - 4 Sets</p>
-<p>Incline Press - 3 Sets</p>
-<p>Shoulder Press - 3 Sets</p>
-<p>Lateral Raises - 3 Sets</p>
-<p>Tricep Pushdown - 3 Sets</p>
-</div>
+<section class="page-head">
+  <div class="wrap narrow">
+    <span class="page-icon" aria-hidden="true">🏋️</span><br>
+    <span class="eyebrow">Training</span>
+    <h1>Workout Planner</h1>
+    <p class="page-sub">Pick your split, follow the day, and watch the rep animation on every move to lock in your form.</p>
+  </div>
+</section>
 
-<div class="card">
-<h2>Tuesday - Pull</h2>
-<p>Pull Ups - 4 Sets</p>
-<p>Barbell Rows - 4 Sets</p>
-<p>Lat Pulldown - 3 Sets</p>
-<p>Face Pulls - 3 Sets</p>
-<p>Bicep Curls - 3 Sets</p>
-</div>
+<section class="option-section">
+  <div class="wrap narrow">
+    <span class="eyebrow">Choose a split</span>
+    <div class="toggle-row" role="group" aria-label="Workout split">
+      <button type="button" class="toggle-btn active" data-split="3" id="split3Btn">3-Day Split</button>
+      <button type="button" class="toggle-btn" data-split="6" id="split6Btn">6-Day Split</button>
+    </div>
+    <p class="option-note" id="splitNote"></p>
 
-<div class="card">
-<h2>Wednesday - Legs</h2>
-<p>Squats - 4 Sets</p>
-<p>Romanian Deadlift - 3 Sets</p>
-<p>Leg Press - 3 Sets</p>
-<p>Leg Curl - 3 Sets</p>
-<p>Calf Raises - 4 Sets</p>
-</div>
+    <div class="muscle-legend">
+      <span><i class="dot dot-back" aria-hidden="true"></i>Back</span>
+      <span><i class="dot dot-biceps" aria-hidden="true"></i>Biceps</span>
+      <span><i class="dot dot-chest" aria-hidden="true"></i>Chest</span>
+      <span><i class="dot dot-triceps" aria-hidden="true"></i>Triceps</span>
+      <span><i class="dot dot-legs" aria-hidden="true"></i>Legs</span>
+      <span><i class="dot dot-shoulders" aria-hidden="true"></i>Shoulders</span>
+    </div>
+  </div>
+</section>
 
-<br>
-<a href="index.html">⬅ Back to Home</a>
+<section class="day-tabs-section">
+  <div class="wrap narrow">
+    <div class="day-tabs" id="dayTabs"></div>
+  </div>
+</section>
+
+<main class="day-section">
+  <div class="wrap narrow">
+    <div class="day-card">
+      <div class="day-card-head">
+        <h2 id="dayTitle"></h2>
+        <p id="dayFocusNote"></p>
+      </div>
+
+      <div class="list-controls">
+        <span class="list-count" id="exCount"></span>
+        <button type="button" class="anim-toggle" id="animToggleBtn">⏸ Pause animations</button>
+      </div>
+
+      <div id="exerciseList"></div>
+    </div>
+
+    <div class="rest-card" id="restDayCard" style="display:none;">
+      <span class="rest-icon" aria-hidden="true">🌙</span>
+      <div>
+        <h3>Day 7 — Rest &amp; Recovery</h3>
+        <p>Growth happens between sessions, not just during them. Prioritize sleep, hydration and light mobility work — skip the gym entirely today.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section class="disclaimer-section">
+  <div class="wrap narrow">
+    <p class="disclaimer">Exercise selection and rep ranges are general guidance for building muscle — adjust loads, volume and exercises to your experience level and any physical limitations. Prioritize proper form over heavier weight, and consult a trainer or physician before starting a new program.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">
+      <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+        <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      FitTrack Pro
+    </span>
+    <span>&copy; 2026 FitTrack Pro — Train smart. Track everything.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  function ex(name, sets, reps, muscle, anim){
+    return { name:name, sets:sets, reps:reps, muscle:muscle, anim:anim };
+  }
+
+  var day1 = {
+    title:'Day 1', focus:'Back & Biceps',
+    note:'Heavy compound pulling to build a thick, strong back and biceps.',
+    exercises:[
+      ex('Deadlift', 4, '5 Reps', 'back', 'hinge'),
+      ex('Pull-Ups', 4, '8-10 Reps', 'back', 'pullvert'),
+      ex('Barbell Rows', 4, '8 Reps', 'back', 'row'),
+      ex('Lat Pulldown', 3, '10-12 Reps', 'back', 'pullvert'),
+      ex('Seated Cable Row', 3, '10-12 Reps', 'back', 'row'),
+      ex('Barbell Bicep Curl', 3, '10-12 Reps', 'biceps', 'curl'),
+      ex('Hammer Curl', 3, '12 Reps', 'biceps', 'curl')
+    ]
+  };
+
+  var day2 = {
+    title:'Day 2', focus:'Chest & Triceps',
+    note:'Maximize pressing strength and chest/triceps size.',
+    exercises:[
+      ex('Barbell Bench Press', 4, '6 Reps', 'chest', 'presschest'),
+      ex('Incline Dumbbell Press', 4, '8-10 Reps', 'chest', 'presschest'),
+      ex('Chest Dip', 3, '10-12 Reps', 'chest', 'presschest'),
+      ex('Cable Fly', 3, '12-15 Reps', 'chest', 'fly'),
+      ex('Close-Grip Bench Press', 3, '8 Reps', 'triceps', 'presschest'),
+      ex('Tricep Pushdown', 3, '12 Reps', 'triceps', 'triceps'),
+      ex('Overhead Tricep Extension', 3, '12 Reps', 'triceps', 'triceps')
+    ]
+  };
+
+  var day3 = {
+    title:'Day 3', focus:'Legs & Shoulders',
+    note:'Build powerful legs and capped shoulders.',
+    exercises:[
+      ex('Barbell Squat', 4, '6 Reps', 'legs', 'squat'),
+      ex('Romanian Deadlift', 4, '8 Reps', 'legs', 'hinge'),
+      ex('Leg Press', 3, '10-12 Reps', 'legs', 'squat'),
+      ex('Walking Lunges', 3, '10 Reps/leg', 'legs', 'squat'),
+      ex('Overhead Shoulder Press', 4, '8 Reps', 'shoulders', 'pressoverhead'),
+      ex('Lateral Raises', 3, '12-15 Reps', 'shoulders', 'lateral'),
+      ex('Calf Raises', 4, '15 Reps', 'legs', 'calf')
+    ]
+  };
+
+  var day4 = {
+    title:'Day 4', focus:'Back & Biceps',
+    note:'Volume-focused back & bicep work to drive hypertrophy.',
+    exercises:[
+      ex('T-Bar Row', 4, '8 Reps', 'back', 'row'),
+      ex('Single-Arm Dumbbell Row', 3, '10 Reps/arm', 'back', 'row'),
+      ex('Wide-Grip Lat Pulldown', 3, '10-12 Reps', 'back', 'pullvert'),
+      ex('Straight-Arm Pulldown', 3, '12-15 Reps', 'back', 'row'),
+      ex('Face Pulls', 3, '15 Reps', 'shoulders', 'row'),
+      ex('Incline Dumbbell Curl', 3, '10-12 Reps', 'biceps', 'curl'),
+      ex('Cable Rope Hammer Curl', 3, '12 Reps', 'biceps', 'curl')
+    ]
+  };
+
+  var day5 = {
+    title:'Day 5', focus:'Chest & Triceps',
+    note:'Higher-rep chest & triceps finisher work for added size.',
+    exercises:[
+      ex('Incline Barbell Press', 4, '6-8 Reps', 'chest', 'presschest'),
+      ex('Flat Dumbbell Press', 3, '10 Reps', 'chest', 'presschest'),
+      ex('Pec Deck / Machine Fly', 3, '12-15 Reps', 'chest', 'fly'),
+      ex('Cable Crossover', 3, '12-15 Reps', 'chest', 'fly'),
+      ex('Skull Crushers', 3, '10-12 Reps', 'triceps', 'triceps'),
+      ex('Diamond Push-Ups', 3, '12-15 Reps', 'triceps', 'presschest'),
+      ex('Rope Tricep Pushdown', 3, '12 Reps', 'triceps', 'triceps')
+    ]
+  };
+
+  var day6 = {
+    title:'Day 6', focus:'Legs & Shoulders',
+    note:'Unilateral and isolation-focused leg & shoulder volume.',
+    exercises:[
+      ex('Front Squat', 4, '6-8 Reps', 'legs', 'squat'),
+      ex('Leg Extension', 3, '12-15 Reps', 'legs', 'legext'),
+      ex('Lying Leg Curl', 3, '12-15 Reps', 'legs', 'legext'),
+      ex('Bulgarian Split Squat', 3, '10 Reps/leg', 'legs', 'squat'),
+      ex('Seated Dumbbell Shoulder Press', 3, '10 Reps', 'shoulders', 'pressoverhead'),
+      ex('Cable Lateral Raise', 3, '12-15 Reps', 'shoulders', 'lateral'),
+      ex('Standing Calf Raise', 3, '15 Reps', 'legs', 'calf')
+    ]
+  };
+
+  var splits = {
+    3:{
+      label:'3-Day Split',
+      note:'Train your whole body once per week — three focused sessions pairing complementary muscle groups for full recovery between workouts.',
+      days:[day1, day2, day3],
+      rest:false
+    },
+    6:{
+      label:'6-Day Split',
+      note:'The same three sessions repeated twice with fresh exercise variations — hit every muscle group twice a week for faster, more consistent growth.',
+      days:[day1, day2, day3, day4, day5, day6],
+      rest:true
+    }
+  };
+
+  var state = { split:3, dayIndex:0 };
+
+  var split3Btn = document.getElementById('split3Btn');
+  var split6Btn = document.getElementById('split6Btn');
+  var splitNote = document.getElementById('splitNote');
+  var dayTabs = document.getElementById('dayTabs');
+  var dayTitle = document.getElementById('dayTitle');
+  var dayFocusNote = document.getElementById('dayFocusNote');
+  var exCount = document.getElementById('exCount');
+  var exerciseList = document.getElementById('exerciseList');
+  var restDayCard = document.getElementById('restDayCard');
+  var animToggleBtn = document.getElementById('animToggleBtn');
+
+  function figureSVG(){
+    return '<svg viewBox="0 0 100 100">' +
+      '<circle class="ex-head" cx="50" cy="18" r="7"></circle>' +
+      '<line class="ex-torso" x1="50" y1="25" x2="50" y2="56"></line>' +
+      '<line class="ex-armL-upper" x1="50" y1="30" x2="36" y2="44"></line>' +
+      '<line class="ex-armL-lower" x1="36" y1="44" x2="34" y2="60"></line>' +
+      '<line class="ex-armR-upper" x1="50" y1="30" x2="64" y2="44"></line>' +
+      '<line class="ex-armR-lower" x1="64" y1="44" x2="66" y2="60"></line>' +
+      '<line class="ex-legL-upper" x1="50" y1="56" x2="42" y2="76"></line>' +
+      '<line class="ex-legL-lower" x1="42" y1="76" x2="40" y2="96"></line>' +
+      '<line class="ex-legR-upper" x1="50" y1="56" x2="58" y2="76"></line>' +
+      '<line class="ex-legR-lower" x1="58" y1="76" x2="60" y2="96"></line>' +
+      '</svg>';
+  }
+
+  function renderDayTabs(){
+    var days = splits[state.split].days;
+    dayTabs.innerHTML = '';
+    days.forEach(function(d, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'day-tab' + (i === state.dayIndex ? ' active' : '');
+      btn.textContent = d.title;
+      btn.addEventListener('click', function(){
+        state.dayIndex = i;
+        renderDayTabs();
+        renderDay();
+      });
+      dayTabs.appendChild(btn);
+    });
+  }
+
+  function renderDay(){
+    var day = splits[state.split].days[state.dayIndex];
+
+    dayTitle.textContent = day.title + ' — ' + day.focus;
+    dayFocusNote.textContent = day.note;
+    exCount.textContent = day.exercises.length + ' exercises';
+
+    exerciseList.innerHTML = '';
+    day.exercises.forEach(function(item){
+      var card = document.createElement('div');
+      card.className = 'exercise-card';
+
+      var icon = document.createElement('div');
+      icon.className = 'ex-icon anim-' + item.anim + ' muscle-' + item.muscle;
+      icon.innerHTML = figureSVG();
+
+      var info = document.createElement('div');
+      info.className = 'ex-info';
+
+      var nameEl = document.createElement('div');
+      nameEl.className = 'ex-name';
+      nameEl.textContent = item.name;
+
+      var setsEl = document.createElement('div');
+      setsEl.className = 'ex-sets';
+      setsEl.textContent = item.sets + ' Sets \u00D7 ' + item.reps;
+
+      info.appendChild(nameEl);
+      info.appendChild(setsEl);
+
+      var tag = document.createElement('span');
+      tag.className = 'ex-tag tag-' + item.muscle;
+      tag.textContent = item.muscle.charAt(0).toUpperCase() + item.muscle.slice(1);
+
+      card.appendChild(icon);
+      card.appendChild(info);
+      card.appendChild(tag);
+      exerciseList.appendChild(card);
+    });
+
+    restDayCard.style.display = splits[state.split].rest ? 'flex' : 'none';
+  }
+
+  function setSplit(n){
+    state.split = n;
+    state.dayIndex = 0;
+    split3Btn.classList.toggle('active', n === 3);
+    split6Btn.classList.toggle('active', n === 6);
+    splitNote.textContent = splits[n].note;
+    renderDayTabs();
+    renderDay();
+  }
+
+  split3Btn.addEventListener('click', function(){ setSplit(3); });
+  split6Btn.addEventListener('click', function(){ setSplit(6); });
+
+  animToggleBtn.addEventListener('click', function(){
+    var paused = document.body.classList.toggle('anim-paused');
+    animToggleBtn.textContent = paused ? '\u25B6 Resume animations' : '\u23F8 Pause animations';
+  });
+
+  setSplit(3);
+
+})();
+</script>
 
 </body>
 </html>
