@@ -1,85 +1,682 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Water Tracker</title>
+<meta name="description" content="Log your water intake, track progress toward your daily goal, and build a hydration habit — FitTrack Pro.">
+<meta name="theme-color" content="#121214">
+<title>Water Tracker — FitTrack Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+  --bg:#121214;
+  --bg-soft:#1a1b1f;
+  --surface:#1c1e23;
+  --surface-strong:#22242b;
+  --border:#2b2e35;
+  --border-strong:#3a3e48;
+  --accent:#ff4b2b;
+  --accent-light:#ff7a57;
+  --accent-soft:rgba(255,75,43,0.12);
+  --accent-border:rgba(255,75,43,0.45);
+  --text:#f5f3ef;
+  --text-muted:#a3a5ac;
+  --text-faint:#6c6e76;
+  --radius:12px;
+  --nav-h:68px;
+
+  --water:#4d8cff;
+  --water-soft:rgba(77,140,255,0.12);
+  --water-border:rgba(77,140,255,0.4);
+  --success:#3ecf6e;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
 body{
-    background:#121212;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    padding:20px;
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.55;
+  overflow-x:hidden;
 }
 
-.card{
-    background:#222;
-    max-width:450px;
-    margin:auto;
-    padding:20px;
-    border-radius:12px;
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
+button{ font-family:inherit; }
+
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+.wrap.narrow{ max-width:560px; }
+
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
+
+/* ---------- navbar ---------- */
+.navbar{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(18,18,20,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; }
+.brand{ display:inline-flex; align-items:center; gap:10px; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
+
+.nav-cta{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- page head ---------- */
+.page-head{ text-align:center; padding:44px 24px 6px; animation:slideUp 0.6s ease both; }
+.page-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:46px; height:46px; border-radius:12px;
+  background:var(--water-soft); font-size:20px; margin-bottom:14px;
+}
+.eyebrow{
+  display:inline-block; font-family:'Oswald',sans-serif; font-size:0.74rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+}
+.page-head h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:10px; }
+.page-sub{ color:var(--text-muted); font-size:0.95rem; max-width:440px; margin:0 auto; }
+
+/* ---------- shared toggle pattern ---------- */
+.option-section{ padding:24px 0 4px; text-align:center; }
+.option-section + .option-section{ padding-top:6px; }
+
+.toggle-row{
+  display:flex; flex-wrap:wrap; background:var(--bg-soft); border:1px solid var(--border);
+  border-radius:999px; padding:4px; margin:0 auto 14px; max-width:420px;
+}
+.toggle-row.small{ max-width:200px; }
+.toggle-btn{
+  flex:1; background:transparent; border:none; color:var(--text-muted);
+  font-size:0.85rem; font-weight:600; padding:10px 8px;
+  border-radius:999px; cursor:pointer; transition:background 0.2s ease, color 0.2s ease;
+  white-space:nowrap;
+}
+.toggle-btn.active{ background:var(--accent); color:#15151a; }
+
+.option-note{
+  color:var(--text-muted); font-size:0.88rem; max-width:480px; margin:0 auto 18px;
 }
 
-button{
-    padding:12px 20px;
-    margin:10px;
-    background:#28a745;
-    color:white;
-    border:none;
-    border-radius:5px;
+.custom-goal-row{
+  display:none; align-items:center; justify-content:center; gap:10px;
+  margin:0 auto 18px; flex-wrap:wrap;
+}
+.custom-goal-row.visible{ display:flex; }
+.custom-goal-row input{
+  width:110px; background:var(--surface); border:1px solid var(--border-strong);
+  color:var(--text); border-radius:10px; padding:10px 12px; font-size:0.9rem; text-align:center;
+}
+.custom-goal-row input:focus{ outline:none; border-color:var(--accent-border); }
+.custom-goal-row button{
+  background:var(--accent); color:#15151a; border:none; border-radius:10px;
+  padding:10px 18px; font-weight:600; font-size:0.85rem; cursor:pointer;
 }
 
-a{
-    color:#28a745;
-    text-decoration:none;
+/* ---------- progress ring ---------- */
+.progress-section{ padding:10px 0 30px; }
+.ring-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:20px;
+  padding:32px 20px; text-align:center; animation:slideUp 0.6s ease both;
 }
+.ring-wrap{ position:relative; width:210px; height:210px; margin:0 auto 6px; }
+.ring-wrap svg{ width:100%; height:100%; }
+#ringProgress{ transition:stroke-dashoffset 0.6s ease, stroke 0.4s ease; }
+.ring-center{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px;
+}
+.ring-value{ font-family:'Oswald',sans-serif; font-weight:700; font-size:2.1rem; }
+.ring-goal{ color:var(--text-muted); font-size:0.82rem; }
+.ring-percent{ color:var(--water); font-size:0.78rem; font-weight:600; margin-top:2px; }
+.motivation{ margin-top:16px; font-size:0.95rem; color:var(--text-muted); }
+.motivation.success{ color:var(--success); font-weight:600; }
+
+/* ---------- quick add ---------- */
+.add-section{ padding:6px 0 30px; }
+.quick-add-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:16px; }
+@media (min-width:640px){ .quick-add-grid{ grid-template-columns:repeat(4,1fr); } }
+
+.quick-btn{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 10px; cursor:pointer; color:var(--text);
+  transition:border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.quick-btn:hover{ border-color:var(--water-border); background:var(--water-soft); transform:translateY(-3px); }
+.quick-btn .qicon{ font-size:22px; }
+.quick-btn .qamt{ font-weight:700; font-size:0.95rem; }
+.quick-btn .qlabel{ font-size:0.72rem; color:var(--text-faint); }
+
+.custom-add-row{
+  display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap;
+}
+.custom-add-row input{
+  width:160px; background:var(--surface); border:1px solid var(--border-strong);
+  color:var(--text); border-radius:10px; padding:12px 14px; font-size:0.92rem;
+}
+.custom-add-row input::placeholder{ color:var(--text-faint); }
+.custom-add-row input:focus{ outline:none; border-color:var(--water-border); }
+.unit-suffix{ color:var(--text-muted); font-size:0.85rem; }
+.add-btn{
+  background:var(--water); color:#0c1424; border:none; border-radius:10px;
+  padding:12px 22px; font-weight:700; font-size:0.88rem; cursor:pointer;
+  transition:filter 0.2s ease;
+}
+.add-btn:hover{ filter:brightness(1.1); }
+
+/* ---------- log ---------- */
+.log-section{ padding:6px 0 30px; }
+.log-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px;
+}
+.log-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:10px; }
+.log-head h2{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1.05rem; }
+.reset-link{
+  background:none; border:none; color:var(--text-faint); font-size:0.78rem;
+  cursor:pointer; text-decoration:underline; padding:4px;
+}
+.reset-link:hover{ color:var(--accent-light); }
+
+.log-list{ list-style:none; margin-top:8px; }
+.log-item{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  font-size:0.92rem; padding:11px 0; border-bottom:1px solid var(--border);
+  animation:slideUp 0.4s ease both;
+}
+.log-list li:last-child{ border-bottom:none; }
+.log-left{ display:flex; align-items:center; gap:10px; }
+.log-amt{
+  font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;
+  padding:4px 9px; border-radius:999px; background:var(--water-soft); color:var(--water);
+  border:1px solid var(--water-border); white-space:nowrap;
+}
+.log-time{ color:var(--text-faint); font-size:0.82rem; }
+.log-remove{
+  background:none; border:none; color:var(--text-faint); font-size:1rem;
+  cursor:pointer; line-height:1; padding:4px 6px; border-radius:6px;
+}
+.log-remove:hover{ color:var(--accent-light); background:var(--accent-soft); }
+
+.empty-state{ text-align:center; color:var(--text-faint); font-size:0.9rem; padding:18px 0 6px; }
+.empty-state span{ display:block; font-size:26px; margin-bottom:8px; }
+
+/* ---------- tip card ---------- */
+.tip-section{ padding:6px 0 20px; }
+.tip-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px; display:flex; align-items:flex-start; gap:14px;
+}
+.tip-icon{
+  flex-shrink:0; width:38px; height:38px; border-radius:10px;
+  background:var(--water-soft); display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.tip-body{ flex:1; }
+.tip-label{ font-size:0.7rem; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; color:var(--water); margin-bottom:4px; }
+.tip-text{ font-size:0.92rem; color:var(--text); }
+.tip-refresh{
+  margin-top:10px; background:none; border:1px solid var(--border-strong); color:var(--text-muted);
+  border-radius:999px; padding:7px 14px; font-size:0.78rem; font-weight:600; cursor:pointer;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.tip-refresh:hover{ color:var(--text); border-color:var(--water-border); background:var(--water-soft); }
+
+.disclaimer-section{ padding:8px 0 50px; text-align:center; }
+.disclaimer{ font-size:0.78rem; color:var(--text-faint); max-width:520px; margin:0 auto; }
+
+/* ---------- footer ---------- */
+footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
+.footer-inner{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; color:var(--text-faint); font-size:0.85rem; }
+.footer-brand{ display:inline-flex; align-items:center; gap:8px; color:var(--text-muted); font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; }
+.footer-brand svg{ color:var(--accent); }
+@media (min-width:768px){ .footer-inner{ flex-direction:row; justify-content:space-between; text-align:left; } }
+
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="14" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
+    </div>
+    <a class="nav-cta" href="index.html">&#8592; Back to Home</a>
+  </div>
+</header>
 
-<h1>💧 Water Tracker</h1>
+<section class="page-head">
+  <div class="wrap narrow">
+    <span class="page-icon" aria-hidden="true">💧</span><br>
+    <span class="eyebrow">Hydration</span>
+    <h1>Water Tracker</h1>
+    <p class="page-sub">Log your intake, watch the ring fill up, and build a habit that sticks.</p>
+  </div>
+</section>
 
-<h2 id="count">0 Glasses</h2>
+<section class="option-section">
+  <div class="wrap narrow">
+    <span class="eyebrow">Daily goal</span>
+    <div class="toggle-row" role="group" aria-label="Daily water goal">
+      <button type="button" class="toggle-btn" data-goal="2000" id="goal2000Btn">2 L</button>
+      <button type="button" class="toggle-btn" data-goal="2500" id="goal2500Btn">2.5 L</button>
+      <button type="button" class="toggle-btn active" data-goal="3000" id="goal3000Btn">3 L</button>
+      <button type="button" class="toggle-btn" data-goal="3500" id="goal3500Btn">3.5 L</button>
+      <button type="button" class="toggle-btn" data-goal="custom" id="goalCustomBtn">Custom</button>
+    </div>
+    <div class="custom-goal-row" id="customGoalRow">
+      <input type="number" id="customGoalInput" placeholder="e.g. 2800" min="100" step="50">
+      <span class="unit-suffix" id="customGoalUnit">ml</span>
+      <button type="button" id="setCustomGoalBtn">Set goal</button>
+    </div>
+  </div>
+</section>
 
-<button onclick="addWater()">+1 Glass</button>
+<section class="option-section">
+  <div class="wrap narrow">
+    <span class="eyebrow">Units</span>
+    <div class="toggle-row small" role="group" aria-label="Measurement unit">
+      <button type="button" class="toggle-btn active" data-unit="ml" id="unitMlBtn">ml</button>
+      <button type="button" class="toggle-btn" data-unit="oz" id="unitOzBtn">oz</button>
+    </div>
+  </div>
+</section>
 
-<button onclick="resetWater()">Reset</button>
+<main>
+  <section class="progress-section">
+    <div class="wrap narrow">
+      <div class="ring-card">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="86" fill="none" stroke="var(--border)" stroke-width="14"></circle>
+            <circle id="ringProgress" cx="100" cy="100" r="86" fill="none" stroke="var(--water)" stroke-width="14"
+                    stroke-linecap="round" stroke-dasharray="540.35" stroke-dashoffset="540.35"
+                    transform="rotate(-90 100 100)"></circle>
+          </svg>
+          <div class="ring-center">
+            <span class="ring-value" id="ringValue">0 ml</span>
+            <span class="ring-goal" id="ringGoal">of 3000 ml goal</span>
+            <span class="ring-percent" id="ringPercent">0%</span>
+          </div>
+        </div>
+        <p class="motivation" id="motivationText">Time to start sipping 💧</p>
+      </div>
+    </div>
+  </section>
 
-<br><br>
+  <section class="add-section">
+    <div class="wrap narrow">
+      <span class="eyebrow">Log intake</span>
+      <div class="quick-add-grid">
+        <button type="button" class="quick-btn" data-amount="200">
+          <span class="qicon" aria-hidden="true">☕</span>
+          <span class="qamt" data-base="200">200 ml</span>
+          <span class="qlabel">Cup</span>
+        </button>
+        <button type="button" class="quick-btn" data-amount="250">
+          <span class="qicon" aria-hidden="true">🥤</span>
+          <span class="qamt" data-base="250">250 ml</span>
+          <span class="qlabel">Glass</span>
+        </button>
+        <button type="button" class="quick-btn" data-amount="500">
+          <span class="qicon" aria-hidden="true">🍶</span>
+          <span class="qamt" data-base="500">500 ml</span>
+          <span class="qlabel">Bottle</span>
+        </button>
+        <button type="button" class="quick-btn" data-amount="1000">
+          <span class="qicon" aria-hidden="true">🧴</span>
+          <span class="qamt" data-base="1000">1000 ml</span>
+          <span class="qlabel">Large bottle</span>
+        </button>
+      </div>
+      <div class="custom-add-row">
+        <input type="number" id="customAmountInput" placeholder="Custom amount" min="1">
+        <span class="unit-suffix" id="customAmountUnit">ml</span>
+        <button type="button" class="add-btn" id="customAddBtn">Add</button>
+      </div>
+    </div>
+  </section>
 
-<a href="index.html">⬅ Back to Home</a>
+  <section class="log-section">
+    <div class="wrap narrow">
+      <div class="log-card">
+        <div class="log-head">
+          <h2>Today's Log</h2>
+          <button type="button" class="reset-link" id="resetBtn">Reset today</button>
+        </div>
+        <ul class="log-list" id="logList"></ul>
+        <div class="empty-state" id="emptyState">
+          <span aria-hidden="true">💧</span>
+          No entries yet — log your first glass above.
+        </div>
+      </div>
+    </div>
+  </section>
 
-</div>
+  <section class="tip-section">
+    <div class="wrap narrow">
+      <div class="tip-card">
+        <span class="tip-icon" aria-hidden="true">💡</span>
+        <div class="tip-body">
+          <div class="tip-label">Hydration tip</div>
+          <p class="tip-text" id="tipText"></p>
+          <button type="button" class="tip-refresh" id="tipRefreshBtn">🔄 New tip</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="disclaimer-section">
+  <div class="wrap narrow">
+    <p class="disclaimer">About 2–3 liters (8–12 cups) a day is a common general guideline — actual needs vary with body weight, activity level, climate and health conditions, so adjust to fit you. Entries are kept in memory for this session only, so refreshing the page will reset the log.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">
+      <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+        <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      FitTrack Pro
+    </span>
+    <span>&copy; 2026 FitTrack Pro — Train smart. Track everything.</span>
+  </div>
+</footer>
 
 <script>
+(function(){
 
-let water =
-parseInt(localStorage.getItem("water")) || 0;
+  var ML_PER_OZ = 29.5735;
+  var CIRC = 2 * Math.PI * 86;
 
-function updateDisplay(){
-    document.getElementById("count").innerHTML =
-    water + " Glasses";
-}
+  var tips = [
+    'Drinking a glass of water right after waking up helps kickstart your metabolism.',
+    'Thirst is a late signal — by the time you feel thirsty, you may already be mildly dehydrated.',
+    'Spread your intake through the day rather than chugging it all at once for better absorption.',
+    'Pale yellow urine is a good general sign that you\'re well hydrated.',
+    'Caffeine and intense exercise both increase your fluid needs — top up afterward.',
+    'Keeping a bottle within arm\'s reach makes you far more likely to sip consistently.',
+    'Fruits like watermelon and cucumber can meaningfully add to your daily water intake.',
+    'Hydration affects focus and energy — a 2% drop in body water can measurably impact concentration.'
+  ];
 
-function addWater(){
-    water++;
-    localStorage.setItem("water", water);
-    updateDisplay();
-}
+  var state = {
+    unit: 'ml',
+    goal: 3000,
+    entries: [] // {id, amountMl, time: Date}
+  };
 
-function resetWater(){
-    water = 0;
-    localStorage.setItem("water", water);
-    updateDisplay();
-}
+  var tipIndex = 0;
 
-updateDisplay();
+  // ---- element refs ----
+  var ringProgress = document.getElementById('ringProgress');
+  var ringValue = document.getElementById('ringValue');
+  var ringGoal = document.getElementById('ringGoal');
+  var ringPercent = document.getElementById('ringPercent');
+  var motivationText = document.getElementById('motivationText');
 
+  var goalBtns = {
+    2000: document.getElementById('goal2000Btn'),
+    2500: document.getElementById('goal2500Btn'),
+    3000: document.getElementById('goal3000Btn'),
+    3500: document.getElementById('goal3500Btn'),
+    custom: document.getElementById('goalCustomBtn')
+  };
+  var customGoalRow = document.getElementById('customGoalRow');
+  var customGoalInput = document.getElementById('customGoalInput');
+  var customGoalUnit = document.getElementById('customGoalUnit');
+  var setCustomGoalBtn = document.getElementById('setCustomGoalBtn');
+
+  var unitMlBtn = document.getElementById('unitMlBtn');
+  var unitOzBtn = document.getElementById('unitOzBtn');
+
+  var quickBtns = document.querySelectorAll('.quick-btn');
+  var customAmountInput = document.getElementById('customAmountInput');
+  var customAmountUnit = document.getElementById('customAmountUnit');
+  var customAddBtn = document.getElementById('customAddBtn');
+
+  var logList = document.getElementById('logList');
+  var emptyState = document.getElementById('emptyState');
+  var resetBtn = document.getElementById('resetBtn');
+
+  var tipText = document.getElementById('tipText');
+  var tipRefreshBtn = document.getElementById('tipRefreshBtn');
+
+  // ---- helpers ----
+  function mlToDisplay(ml){
+    if (state.unit === 'oz') return Math.round((ml / ML_PER_OZ) * 10) / 10;
+    return Math.round(ml);
+  }
+
+  function formatAmt(ml){
+    return mlToDisplay(ml) + ' ' + state.unit;
+  }
+
+  function toMl(value, unit){
+    return unit === 'oz' ? value * ML_PER_OZ : value;
+  }
+
+  function formatTime(date){
+    var h = date.getHours();
+    var m = date.getMinutes();
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if (h === 0) h = 12;
+    var mm = m < 10 ? '0' + m : String(m);
+    return h + ':' + mm + ' ' + ampm;
+  }
+
+  function totalMl(){
+    return state.entries.reduce(function(sum, e){ return sum + e.amountMl; }, 0);
+  }
+
+  function getMotivation(percent){
+    if (percent <= 0) return { text:'Time to start sipping 💧', success:false };
+    if (percent < 25) return { text:'Good start — keep it going.', success:false };
+    if (percent < 75) return { text:'Building momentum — nice pace.', success:false };
+    if (percent < 100) return { text:'Almost there, final push!', success:false };
+    return { text:'Goal smashed! Great hydration today 🎉', success:true };
+  }
+
+  // ---- render ----
+  function render(){
+    var total = totalMl();
+    var percent = state.goal > 0 ? Math.min(100, (total / state.goal) * 100) : 0;
+    var offset = CIRC * (1 - percent / 100);
+
+    ringProgress.style.strokeDashoffset = offset;
+    ringProgress.style.stroke = percent >= 100 ? 'var(--success)' : 'var(--water)';
+
+    ringValue.textContent = formatAmt(total);
+    ringGoal.textContent = 'of ' + formatAmt(state.goal) + ' goal';
+    ringPercent.textContent = Math.round(percent) + '%';
+
+    var mood = getMotivation(percent);
+    motivationText.textContent = mood.text;
+    motivationText.classList.toggle('success', mood.success);
+
+    // quick-add button labels
+    quickBtns.forEach(function(btn){
+      var base = Number(btn.getAttribute('data-amount'));
+      var qamt = btn.querySelector('.qamt');
+      qamt.textContent = formatAmt(base);
+    });
+
+    // unit suffix labels
+    customGoalUnit.textContent = state.unit;
+    customAmountUnit.textContent = state.unit;
+
+    // log list, most recent first
+    logList.innerHTML = '';
+    var sorted = state.entries.slice().reverse();
+    emptyState.style.display = sorted.length ? 'none' : 'block';
+
+    sorted.forEach(function(entry){
+      var li = document.createElement('li');
+      li.className = 'log-item';
+
+      var left = document.createElement('div');
+      left.className = 'log-left';
+
+      var amtSpan = document.createElement('span');
+      amtSpan.className = 'log-amt';
+      amtSpan.textContent = formatAmt(entry.amountMl);
+
+      var timeSpan = document.createElement('span');
+      timeSpan.className = 'log-time';
+      timeSpan.textContent = formatTime(entry.time);
+
+      left.appendChild(amtSpan);
+      left.appendChild(timeSpan);
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'log-remove';
+      removeBtn.setAttribute('aria-label', 'Remove entry');
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', function(){ removeEntry(entry.id); });
+
+      li.appendChild(left);
+      li.appendChild(removeBtn);
+      logList.appendChild(li);
+    });
+  }
+
+  // ---- actions ----
+  function addEntry(amountMl){
+    if (!amountMl || amountMl <= 0) return;
+    state.entries.push({ id: Date.now() + Math.random(), amountMl: amountMl, time: new Date() });
+    render();
+  }
+
+  function removeEntry(id){
+    state.entries = state.entries.filter(function(e){ return e.id !== id; });
+    render();
+  }
+
+  function setGoal(ml){
+    state.goal = ml;
+    render();
+  }
+
+  function setActiveGoalBtn(key){
+    Object.keys(goalBtns).forEach(function(k){
+      goalBtns[k].classList.toggle('active', k === String(key));
+    });
+  }
+
+  function setUnit(unit){
+    state.unit = unit;
+    unitMlBtn.classList.toggle('active', unit === 'ml');
+    unitOzBtn.classList.toggle('active', unit === 'oz');
+    render();
+  }
+
+  function showTip(idx){
+    tipText.textContent = tips[idx];
+  }
+
+  // ---- events ----
+  [2000, 2500, 3000, 3500].forEach(function(val){
+    goalBtns[val].addEventListener('click', function(){
+      customGoalRow.classList.remove('visible');
+      setActiveGoalBtn(val);
+      setGoal(val);
+    });
+  });
+
+  goalBtns.custom.addEventListener('click', function(){
+    setActiveGoalBtn('custom');
+    customGoalRow.classList.add('visible');
+    customGoalInput.focus();
+  });
+
+  setCustomGoalBtn.addEventListener('click', function(){
+    var raw = parseFloat(customGoalInput.value);
+    if (isNaN(raw) || raw <= 0) return;
+    setGoal(Math.round(toMl(raw, state.unit)));
+  });
+
+  unitMlBtn.addEventListener('click', function(){ setUnit('ml'); });
+  unitOzBtn.addEventListener('click', function(){ setUnit('oz'); });
+
+  quickBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      addEntry(Number(btn.getAttribute('data-amount')));
+    });
+  });
+
+  customAddBtn.addEventListener('click', function(){
+    var raw = parseFloat(customAmountInput.value);
+    if (isNaN(raw) || raw <= 0) return;
+    addEntry(toMl(raw, state.unit));
+    customAmountInput.value = '';
+  });
+
+  customAmountInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') customAddBtn.click();
+  });
+
+  resetBtn.addEventListener('click', function(){
+    if (state.entries.length && !confirm('Clear all of today\'s logged entries?')) return;
+    state.entries = [];
+    render();
+  });
+
+  tipRefreshBtn.addEventListener('click', function(){
+    var next = Math.floor(Math.random() * tips.length);
+    if (tips.length > 1 && next === tipIndex) next = (next + 1) % tips.length;
+    tipIndex = next;
+    showTip(tipIndex);
+  });
+
+  // ---- init ----
+  tipIndex = Math.floor(Math.random() * tips.length);
+  showTip(tipIndex);
+  render();
+
+})();
 </script>
 
 </body>
