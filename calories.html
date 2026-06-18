@@ -1,125 +1,551 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calorie Calculator</title>
+<meta name="description" content="Calculate your daily calorie needs and a macro split to match your goal with FitTrack Pro.">
+<meta name="theme-color" content="#121214">
+<title>Calorie Calculator — FitTrack Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+  --bg:#121214;
+  --bg-soft:#1a1b1f;
+  --surface:#1c1e23;
+  --surface-strong:#22242b;
+  --border:#2b2e35;
+  --border-strong:#3a3e48;
+  --accent:#ff4b2b;
+  --accent-light:#ff7a57;
+  --accent-soft:rgba(255,75,43,0.12);
+  --accent-border:rgba(255,75,43,0.45);
+  --text:#f5f3ef;
+  --text-muted:#a3a5ac;
+  --text-faint:#6c6e76;
+  --radius:12px;
+  --nav-h:68px;
+
+  --m-protein:#4d8cff;
+  --m-carbs:#f5b942;
+  --m-fat:#34d399;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
 body{
-    font-family: Arial, sans-serif;
-    background:#121212;
-    color:white;
-    text-align:center;
-    padding:20px;
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.55;
+  overflow-x:hidden;
 }
 
-.container{
-    max-width:450px;
-    margin:auto;
-    background:#222;
-    padding:20px;
-    border-radius:12px;
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
+
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+.wrap.narrow{ max-width:560px; }
+
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
+
+/* ---------- navbar ---------- */
+.navbar{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(18,18,20,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; }
+.brand{ display:inline-flex; align-items:center; gap:10px; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
+
+.nav-cta{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- page head ---------- */
+.page-head{ text-align:center; padding:44px 24px 6px; animation:slideUp 0.6s ease both; }
+.page-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:46px; height:46px; border-radius:12px;
+  background:var(--accent-soft); font-size:20px; margin-bottom:14px;
+}
+.eyebrow{
+  display:inline-block; font-family:'Oswald',sans-serif; font-size:0.74rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+}
+.page-head h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:10px; }
+.page-sub{ color:var(--text-muted); font-size:0.95rem; max-width:440px; margin:0 auto; }
+
+/* ---------- calculator card ---------- */
+.calc-section{ padding:28px 0 64px; }
+.calc-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:26px; box-shadow:0 1px 2px rgba(0,0,0,0.4);
+  animation:slideUp 0.6s ease both; animation-delay:0.05s;
 }
 
-input, select{
-    width:90%;
-    padding:10px;
-    margin:10px 0;
-    border:none;
-    border-radius:8px;
+.toggle-row{
+  display:flex; background:var(--bg-soft); border:1px solid var(--border);
+  border-radius:999px; padding:4px; margin-bottom:14px;
+}
+.toggle-row.three{ gap:2px; }
+.toggle-btn{
+  flex:1; background:transparent; border:none; color:var(--text-muted);
+  font-family:inherit; font-size:0.8rem; font-weight:600; padding:9px 6px;
+  border-radius:999px; cursor:pointer; transition:background 0.2s ease, color 0.2s ease;
+}
+.toggle-btn.active{ background:var(--accent); color:#15151a; }
+
+.field-grid{ display:grid; grid-template-columns:1fr; gap:0; }
+@media (min-width:480px){ .field-grid{ grid-template-columns:1fr 1fr 1fr; gap:0 10px; } }
+
+.field{ margin-bottom:16px; }
+.field label{
+  display:block; font-size:0.78rem; font-weight:600; letter-spacing:0.3px;
+  text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;
 }
 
-button{
-    background:#28a745;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
+.input-suffix{ position:relative; }
+.input-suffix input,
+.input-suffix select{
+  width:100%; background:var(--bg-soft); border:1px solid var(--border-strong);
+  color:var(--text); font-family:inherit; font-size:0.95rem;
+  padding:13px 40px 13px 14px; border-radius:9px; outline:none;
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  transition:border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-suffix input::placeholder{ color:var(--text-faint); }
+.input-suffix input:focus,
+.input-suffix select:focus{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+.input-suffix .suffix{
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  color:var(--text-faint); font-size:0.85rem; pointer-events:none;
 }
 
-.result{
-    margin-top:15px;
-    font-size:18px;
+.form-error{ color:var(--accent-light); font-size:0.85rem; margin-bottom:6px; min-height:1.2em; }
+
+.cta-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; background:var(--accent); color:#15151a; font-weight:700;
+  letter-spacing:0.4px; text-transform:uppercase; font-size:0.85rem;
+  padding:15px 20px; border:none; border-radius:9px; cursor:pointer;
+  box-shadow:0 10px 24px rgba(255,75,43,0.28);
+  transition:transform 0.2s ease, box-shadow 0.2s ease; margin-top:4px;
+}
+.cta-btn:hover, .cta-btn:focus-visible{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(255,75,43,0.4); }
+.cta-btn:focus-visible{ outline:2px solid var(--accent-light); outline-offset:3px; }
+
+/* ---------- result panel ---------- */
+.result-panel{
+  position:relative; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:26px; margin-top:20px;
+  animation:slideUp 0.6s ease both; animation-delay:0.1s;
+}
+.result-panel::before, .result-panel::after{
+  content:""; position:absolute; width:16px; height:16px; opacity:0; transition:opacity 0.3s ease;
+}
+.result-panel::before{ top:8px; left:8px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); }
+.result-panel::after{ bottom:8px; right:8px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); }
+.result-panel.has-result::before, .result-panel.has-result::after{ opacity:1; }
+
+.calorie-row{ display:grid; grid-template-columns:1fr 1.25fr 1fr; gap:10px; text-align:center; margin-bottom:20px; }
+.calorie-stat{ background:var(--surface-strong); border:1px solid var(--border); border-radius:10px; padding:14px 6px; }
+.calorie-stat.primary{ background:var(--accent-soft); border-color:var(--accent-border); }
+.calorie-value{ display:block; font-family:'Oswald',sans-serif; font-weight:700; font-size:1.15rem; }
+.calorie-stat.primary .calorie-value{ font-size:1.5rem; color:var(--accent); }
+.calorie-label{ display:block; font-size:0.68rem; letter-spacing:1px; text-transform:uppercase; color:var(--text-faint); margin-top:4px; }
+
+.macro-block{ border-top:1px solid var(--border); padding-top:18px; }
+.macro-head{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+.macro-head-label{ font-size:0.85rem; font-weight:600; color:var(--text-muted); }
+
+.macro-bar{ display:flex; height:12px; border-radius:999px; overflow:hidden; background:var(--surface-strong); margin-bottom:14px; }
+.macro-seg{ transition:flex-basis 0.5s ease; }
+.macro-protein{ background:var(--m-protein); }
+.macro-carbs{ background:var(--m-carbs); }
+.macro-fat{ background:var(--m-fat); }
+
+.macro-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.macro-item{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  background:var(--surface-strong); border:1px solid var(--border); border-radius:10px; padding:10px 4px;
+}
+.macro-name{
+  display:flex; align-items:center; gap:6px; font-size:0.68rem;
+  text-transform:uppercase; letter-spacing:0.5px; color:var(--text-faint);
+}
+.macro-amount{ font-weight:700; font-family:'Oswald',sans-serif; font-size:0.92rem; }
+
+.dot{ display:inline-block; width:8px; height:8px; border-radius:50%; }
+.dot-protein{ background:var(--m-protein); }
+.dot-carbs{ background:var(--m-carbs); }
+.dot-fat{ background:var(--m-fat); }
+
+.result-panel:not(.has-result) .macro-block{ opacity:0.45; pointer-events:none; }
+
+.disclaimer{ font-size:0.76rem; color:var(--text-faint); }
+
+/* ---------- footer ---------- */
+footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
+.footer-inner{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; color:var(--text-faint); font-size:0.85rem; }
+.footer-brand{ display:inline-flex; align-items:center; gap:8px; color:var(--text-muted); font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; }
+.footer-brand svg{ color:var(--accent); }
+@media (min-width:768px){ .footer-inner{ flex-direction:row; justify-content:space-between; text-align:left; } }
+
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
 }
 
-a{
-    color:#28a745;
-    text-decoration:none;
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>🔥 Calorie Calculator</h1>
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="14" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
+    </div>
+    <a class="nav-cta" href="index.html">&#8592; Back to Home</a>
+  </div>
+</header>
 
-    <input type="number" id="age" placeholder="Age">
+<section class="page-head">
+  <div class="wrap narrow">
+    <span class="page-icon" aria-hidden="true">🔥</span><br>
+    <span class="eyebrow">Energy needs</span>
+    <h1>Calorie Calculator</h1>
+    <p class="page-sub">Find your daily calorie needs and a macro split to match your goal.</p>
+  </div>
+</section>
 
-    <input type="number" id="weight" placeholder="Weight (kg)">
+<main class="calc-section">
+  <div class="wrap narrow">
 
-    <input type="number" id="height" placeholder="Height (cm)">
+    <div class="calc-card">
 
-    <select id="activity">
-        <option value="1.2">Sedentary</option>
-        <option value="1.375">Light Exercise</option>
-        <option value="1.55">Moderate Exercise</option>
-        <option value="1.725">Heavy Exercise</option>
-    </select>
+      <div class="toggle-row" role="group" aria-label="Units">
+        <button type="button" class="toggle-btn active" id="unitMetricBtn">Metric (kg / cm)</button>
+        <button type="button" class="toggle-btn" id="unitImperialBtn">Imperial (lb / in)</button>
+      </div>
 
-    <button onclick="calculateCalories()">
-        Calculate
-    </button>
+      <div class="toggle-row" role="group" aria-label="Sex">
+        <button type="button" class="toggle-btn active" id="sexMaleBtn">Male</button>
+        <button type="button" class="toggle-btn" id="sexFemaleBtn">Female</button>
+      </div>
 
-    <div class="result" id="result"></div>
+      <div class="field">
+        <label for="age">Age</label>
+        <div class="input-suffix">
+          <input type="number" id="age" inputmode="numeric" min="1" step="1" placeholder="e.g. 25">
+          <span class="suffix">yrs</span>
+        </div>
+      </div>
 
-    <br><br>
+      <div class="field">
+        <label for="weight">Weight</label>
+        <div class="input-suffix">
+          <input type="number" id="weight" inputmode="decimal" min="1" step="0.1" placeholder="e.g. 70">
+          <span class="suffix" id="weightSuffix">kg</span>
+        </div>
+      </div>
 
-    <a href="index.html">⬅ Back to Home</a>
-</div>
+      <div class="field">
+        <label for="height">Height</label>
+        <div class="input-suffix">
+          <input type="number" id="height" inputmode="decimal" min="1" step="0.1" placeholder="e.g. 173">
+          <span class="suffix" id="heightSuffix">cm</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="activity">Activity level</label>
+        <div class="input-suffix">
+          <select id="activity">
+            <option value="1.2">Sedentary</option>
+            <option value="1.375">Light exercise</option>
+            <option value="1.55">Moderate exercise</option>
+            <option value="1.725">Heavy exercise</option>
+            <option value="1.9">Athlete / very heavy</option>
+          </select>
+          <span class="suffix">&#9662;</span>
+        </div>
+      </div>
+
+      <p class="form-error" id="formError"></p>
+
+      <button type="button" class="cta-btn" id="calcBtn">Calculate</button>
+    </div>
+
+    <div class="result-panel" id="resultPanel" aria-live="polite">
+
+      <span class="eyebrow">Your results</span>
+
+      <div class="calorie-row">
+        <div class="calorie-stat">
+          <span class="calorie-value" id="cutValue">&mdash;</span>
+          <span class="calorie-label">Cut</span>
+        </div>
+        <div class="calorie-stat primary">
+          <span class="calorie-value" id="maintainValue">&mdash;</span>
+          <span class="calorie-label">Maintain</span>
+        </div>
+        <div class="calorie-stat">
+          <span class="calorie-value" id="bulkValue">&mdash;</span>
+          <span class="calorie-label">Bulk</span>
+        </div>
+      </div>
+
+      <div class="macro-block">
+
+        <div class="macro-head">
+          <span class="macro-head-label">Macro split</span>
+          <div class="toggle-row three" role="group" aria-label="Macro goal" style="margin-bottom:0;flex:1;max-width:260px;">
+            <button type="button" class="toggle-btn" data-goal="cut" id="goalCutBtn">Cut</button>
+            <button type="button" class="toggle-btn active" data-goal="maintain" id="goalMaintainBtn">Maintain</button>
+            <button type="button" class="toggle-btn" data-goal="bulk" id="goalBulkBtn">Bulk</button>
+          </div>
+        </div>
+
+        <div class="macro-bar">
+          <span class="macro-seg macro-protein" id="macroProteinSeg"></span>
+          <span class="macro-seg macro-carbs" id="macroCarbsSeg"></span>
+          <span class="macro-seg macro-fat" id="macroFatSeg"></span>
+        </div>
+
+        <div class="macro-grid">
+          <div class="macro-item">
+            <span class="macro-name"><i class="dot dot-protein" aria-hidden="true"></i>Protein</span>
+            <span class="macro-amount" id="proteinAmount">&mdash;</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-name"><i class="dot dot-carbs" aria-hidden="true"></i>Carbs</span>
+            <span class="macro-amount" id="carbsAmount">&mdash;</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-name"><i class="dot dot-fat" aria-hidden="true"></i>Fat</span>
+            <span class="macro-amount" id="fatAmount">&mdash;</span>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="disclaimer">Estimates based on the Mifflin&ndash;St Jeor formula — actual needs vary with body composition, genetics and training. Consult a nutrition professional for personalized guidance.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">
+      <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+        <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      FitTrack Pro
+    </span>
+    <span>&copy; 2026 FitTrack Pro — Train smart. Track everything.</span>
+  </div>
+</footer>
 
 <script>
-function calculateCalories(){
+(function(){
 
-    let weight =
-    parseFloat(document.getElementById("weight").value);
+  var currentUnit = 'metric';
+  var currentSex = 'male';
+  var currentGoal = 'maintain';
+  var goalCalories = null;
 
-    let height =
-    parseFloat(document.getElementById("height").value);
+  var macroSplits = {
+    cut:      { protein:0.40, carbs:0.30, fat:0.30 },
+    maintain: { protein:0.30, carbs:0.40, fat:0.30 },
+    bulk:     { protein:0.25, carbs:0.50, fat:0.25 }
+  };
 
-    let age =
-    parseFloat(document.getElementById("age").value);
+  var ageInput = document.getElementById('age');
+  var weightInput = document.getElementById('weight');
+  var heightInput = document.getElementById('height');
+  var activitySelect = document.getElementById('activity');
+  var weightSuffix = document.getElementById('weightSuffix');
+  var heightSuffix = document.getElementById('heightSuffix');
+  var formError = document.getElementById('formError');
 
-    let activity =
-    parseFloat(document.getElementById("activity").value);
+  var unitMetricBtn = document.getElementById('unitMetricBtn');
+  var unitImperialBtn = document.getElementById('unitImperialBtn');
+  var sexMaleBtn = document.getElementById('sexMaleBtn');
+  var sexFemaleBtn = document.getElementById('sexFemaleBtn');
 
-    if(!weight || !height || !age){
-        document.getElementById("result").innerHTML =
-        "Please fill all fields";
-        return;
+  var cutValue = document.getElementById('cutValue');
+  var maintainValue = document.getElementById('maintainValue');
+  var bulkValue = document.getElementById('bulkValue');
+  var resultPanel = document.getElementById('resultPanel');
+
+  var goalCutBtn = document.getElementById('goalCutBtn');
+  var goalMaintainBtn = document.getElementById('goalMaintainBtn');
+  var goalBulkBtn = document.getElementById('goalBulkBtn');
+
+  var macroProteinSeg = document.getElementById('macroProteinSeg');
+  var macroCarbsSeg = document.getElementById('macroCarbsSeg');
+  var macroFatSeg = document.getElementById('macroFatSeg');
+  var proteinAmount = document.getElementById('proteinAmount');
+  var carbsAmount = document.getElementById('carbsAmount');
+  var fatAmount = document.getElementById('fatAmount');
+
+  function resetResult(){
+    goalCalories = null;
+    cutValue.innerHTML = '&mdash;';
+    maintainValue.innerHTML = '&mdash;';
+    bulkValue.innerHTML = '&mdash;';
+    proteinAmount.innerHTML = '&mdash;';
+    carbsAmount.innerHTML = '&mdash;';
+    fatAmount.innerHTML = '&mdash;';
+    resultPanel.classList.remove('has-result');
+  }
+
+  function setUnit(unit){
+    currentUnit = unit;
+    unitMetricBtn.classList.toggle('active', unit === 'metric');
+    unitImperialBtn.classList.toggle('active', unit === 'imperial');
+
+    if(unit === 'imperial'){
+      weightInput.placeholder = 'e.g. 154';
+      heightInput.placeholder = 'e.g. 68';
+      weightSuffix.textContent = 'lb';
+      heightSuffix.textContent = 'in';
+    } else {
+      weightInput.placeholder = 'e.g. 70';
+      heightInput.placeholder = 'e.g. 173';
+      weightSuffix.textContent = 'kg';
+      heightSuffix.textContent = 'cm';
     }
 
-    let bmr =
-    (10 * weight) +
-    (6.25 * height) -
-    (5 * age) + 5;
+    weightInput.value = '';
+    heightInput.value = '';
+    formError.textContent = '';
+    resetResult();
+  }
 
-    let maintenance =
-    Math.round(bmr * activity);
+  function setSex(sex){
+    currentSex = sex;
+    sexMaleBtn.classList.toggle('active', sex === 'male');
+    sexFemaleBtn.classList.toggle('active', sex === 'female');
+  }
 
-    let bulk =
-    maintenance + 300;
+  function setGoal(goal){
+    currentGoal = goal;
+    goalCutBtn.classList.toggle('active', goal === 'cut');
+    goalMaintainBtn.classList.toggle('active', goal === 'maintain');
+    goalBulkBtn.classList.toggle('active', goal === 'bulk');
+    if(goalCalories){ updateMacros(); }
+  }
 
-    let cut =
-    maintenance - 300;
+  function updateMacros(){
+    var calories = goalCalories[currentGoal];
+    var split = macroSplits[currentGoal];
 
-    document.getElementById("result").innerHTML =
-    "<p>Maintenance: <b>" + maintenance + " kcal</b></p>" +
-    "<p>Bulking: <b>" + bulk + " kcal</b></p>" +
-    "<p>Cutting: <b>" + cut + " kcal</b></p>";
-}
+    var proteinG = Math.round((calories * split.protein) / 4);
+    var carbsG = Math.round((calories * split.carbs) / 4);
+    var fatG = Math.round((calories * split.fat) / 9);
+
+    proteinAmount.textContent = proteinG + 'g';
+    carbsAmount.textContent = carbsG + 'g';
+    fatAmount.textContent = fatG + 'g';
+
+    macroProteinSeg.style.flexBasis = (split.protein * 100) + '%';
+    macroCarbsSeg.style.flexBasis = (split.carbs * 100) + '%';
+    macroFatSeg.style.flexBasis = (split.fat * 100) + '%';
+  }
+
+  function calculateCalories(){
+    var age = parseFloat(ageInput.value);
+    var weightVal = parseFloat(weightInput.value);
+    var heightVal = parseFloat(heightInput.value);
+    var activity = parseFloat(activitySelect.value);
+
+    formError.textContent = '';
+
+    if(!age || !weightVal || !heightVal || age <= 0 || weightVal <= 0 || heightVal <= 0){
+      formError.textContent = 'Enter your age, weight and height to continue.';
+      resetResult();
+      return;
+    }
+
+    var weightKg, heightCm;
+    if(currentUnit === 'imperial'){
+      weightKg = weightVal * 0.453592;
+      heightCm = heightVal * 2.54;
+    } else {
+      weightKg = weightVal;
+      heightCm = heightVal;
+    }
+
+    var sexConstant = currentSex === 'male' ? 5 : -161;
+    var bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + sexConstant;
+
+    var maintenance = Math.round(bmr * activity);
+    var bulk = maintenance + 300;
+    var cut = maintenance - 300;
+
+    cutValue.textContent = cut + ' kcal';
+    maintainValue.textContent = maintenance + ' kcal';
+    bulkValue.textContent = bulk + ' kcal';
+
+    goalCalories = { cut: cut, maintain: maintenance, bulk: bulk };
+    updateMacros();
+
+    resultPanel.classList.add('has-result');
+  }
+
+  unitMetricBtn.addEventListener('click', function(){ setUnit('metric'); });
+  unitImperialBtn.addEventListener('click', function(){ setUnit('imperial'); });
+  sexMaleBtn.addEventListener('click', function(){ setSex('male'); });
+  sexFemaleBtn.addEventListener('click', function(){ setSex('female'); });
+  goalCutBtn.addEventListener('click', function(){ setGoal('cut'); });
+  goalMaintainBtn.addEventListener('click', function(){ setGoal('maintain'); });
+  goalBulkBtn.addEventListener('click', function(){ setGoal('bulk'); });
+  document.getElementById('calcBtn').addEventListener('click', calculateCalories);
+
+  [ageInput, weightInput, heightInput].forEach(function(el){
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ calculateCalories(); }
+    });
+  });
+
+})();
 </script>
 
 </body>
