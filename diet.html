@@ -1,73 +1,495 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diet Planner</title>
+<meta name="description" content="A sample day of meals for cutting, maintaining or bulking, built around your goal — FitTrack Pro.">
+<meta name="theme-color" content="#121214">
+<title>Diet Planner — FitTrack Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+  --bg:#121214;
+  --bg-soft:#1a1b1f;
+  --surface:#1c1e23;
+  --surface-strong:#22242b;
+  --border:#2b2e35;
+  --border-strong:#3a3e48;
+  --accent:#ff4b2b;
+  --accent-light:#ff7a57;
+  --accent-soft:rgba(255,75,43,0.12);
+  --accent-border:rgba(255,75,43,0.45);
+  --text:#f5f3ef;
+  --text-muted:#a3a5ac;
+  --text-faint:#6c6e76;
+  --radius:12px;
+  --nav-h:68px;
+
+  --m-protein:#4d8cff;
+  --m-carbs:#f5b942;
+  --m-fat:#34d399;
+  --m-fiber:#a78bfa;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
 body{
-    background:#121212;
-    color:white;
-    font-family:Arial;
-    padding:20px;
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.55;
+  overflow-x:hidden;
 }
 
-.card{
-    background:#222;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
+
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+.wrap.narrow{ max-width:560px; }
+
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
+
+/* ---------- navbar ---------- */
+.navbar{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(18,18,20,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; }
+.brand{ display:inline-flex; align-items:center; gap:10px; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
+
+.nav-cta{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- page head ---------- */
+.page-head{ text-align:center; padding:44px 24px 6px; animation:slideUp 0.6s ease both; }
+.page-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:46px; height:46px; border-radius:12px;
+  background:var(--accent-soft); font-size:20px; margin-bottom:14px;
+}
+.eyebrow{
+  display:inline-block; font-family:'Oswald',sans-serif; font-size:0.74rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+}
+.page-head h1{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.5rem); margin-bottom:10px; }
+.page-sub{ color:var(--text-muted); font-size:0.95rem; max-width:440px; margin:0 auto; }
+
+/* ---------- plan toggle ---------- */
+.plan-section{ padding:26px 0 8px; text-align:center; }
+
+.toggle-row{
+  display:flex; background:var(--bg-soft); border:1px solid var(--border);
+  border-radius:999px; padding:4px; margin:0 auto 16px; max-width:360px;
+}
+.toggle-btn{
+  flex:1; background:transparent; border:none; color:var(--text-muted);
+  font-family:inherit; font-size:0.85rem; font-weight:600; padding:10px 8px;
+  border-radius:999px; cursor:pointer; transition:background 0.2s ease, color 0.2s ease;
+}
+.toggle-btn.active{ background:var(--accent); color:#15151a; }
+
+.plan-note{
+  color:var(--text-muted); font-size:0.92rem; max-width:480px; margin:0 auto 22px;
 }
 
-a{
-    color:#28a745;
-    text-decoration:none;
+.tag-legend{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px 18px;
+  font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;
 }
+.tag-legend span{ display:inline-flex; align-items:center; }
+.dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+.dot-protein{ background:var(--m-protein); }
+.dot-carbs{ background:var(--m-carbs); }
+.dot-fat{ background:var(--m-fat); }
+.dot-fiber{ background:var(--m-fiber); }
+.dot-supp{ background:var(--text-faint); }
+.dot-veg{ background:#3ecf6e; }
+.dot-nonveg{ background:#e0473f; }
+
+/* ---------- diet type toggle ---------- */
+.diet-section{ padding:4px 0 26px; text-align:center; }
+.diet-section .toggle-row{ max-width:300px; }
+.toggle-btn .dot{ margin-right:7px; vertical-align:middle; }
+.diet-note{
+  color:var(--text-muted); font-size:0.92rem; max-width:480px; margin:0 auto;
+}
+
+/* ---------- meal grid ---------- */
+.meal-section{ padding:14px 0 20px; }
+
+.meal-grid{
+  display:grid; grid-template-columns:1fr; gap:18px;
+}
+@media (min-width:640px){ .meal-grid{ grid-template-columns:repeat(2,1fr); } }
+
+.meal-grid.fade-in .meal-card{ animation:slideUp 0.5s ease both; }
+.meal-grid .meal-card:nth-child(1){ animation-delay:0.02s; }
+.meal-grid .meal-card:nth-child(2){ animation-delay:0.06s; }
+.meal-grid .meal-card:nth-child(3){ animation-delay:0.10s; }
+.meal-grid .meal-card:nth-child(4){ animation-delay:0.14s; }
+.meal-grid .meal-card:nth-child(5){ animation-delay:0.18s; }
+
+.meal-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:20px; box-shadow:0 1px 2px rgba(0,0,0,0.4);
+}
+
+.meal-head{ display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; }
+.meal-icon{
+  flex-shrink:0; width:42px; height:42px; border-radius:10px;
+  background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:19px;
+}
+.meal-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1.05rem; }
+.meal-time{ display:block; font-size:0.75rem; color:var(--text-faint); margin-top:2px; letter-spacing:0.3px; }
+
+.meal-foods{ list-style:none; }
+.food-item{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  font-size:0.92rem; padding:9px 0; border-bottom:1px solid var(--border);
+}
+.meal-foods li:last-child{ border-bottom:none; padding-bottom:0; }
+
+.food-tag{
+  font-size:0.66rem; font-weight:600; text-transform:uppercase; letter-spacing:0.4px;
+  padding:4px 9px; border-radius:999px; white-space:nowrap; flex-shrink:0;
+}
+.tag-protein{ background:rgba(77,140,255,0.15); color:var(--m-protein); border:1px solid rgba(77,140,255,0.35); }
+.tag-carbs{ background:rgba(245,185,66,0.15); color:var(--m-carbs); border:1px solid rgba(245,185,66,0.35); }
+.tag-fat{ background:rgba(52,211,153,0.15); color:var(--m-fat); border:1px solid rgba(52,211,153,0.35); }
+.tag-fiber{ background:rgba(167,139,250,0.15); color:var(--m-fiber); border:1px solid rgba(167,139,250,0.35); }
+.tag-supp{ background:var(--surface-strong); color:var(--text-muted); border:1px solid var(--border-strong); }
+
+.disclaimer-section{ padding:8px 0 50px; text-align:center; }
+.disclaimer{ font-size:0.78rem; color:var(--text-faint); max-width:520px; margin:0 auto; }
+
+/* ---------- footer ---------- */
+footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
+.footer-inner{ display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; color:var(--text-faint); font-size:0.85rem; }
+.footer-brand{ display:inline-flex; align-items:center; gap:8px; color:var(--text-muted); font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; }
+.footer-brand svg{ color:var(--accent); }
+@media (min-width:768px){ .footer-inner{ flex-direction:row; justify-content:space-between; text-align:left; } }
+
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>🍽️ Bulking Diet Planner</h1>
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="14" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
+    </div>
+    <a class="nav-cta" href="index.html">&#8592; Back to Home</a>
+  </div>
+</header>
 
-<div class="card">
-<h2>Breakfast</h2>
-<p>4 Eggs</p>
-<p>Oats</p>
-<p>Milk</p>
-<p>Banana</p>
-</div>
+<section class="page-head">
+  <div class="wrap narrow">
+    <span class="page-icon" aria-hidden="true">🍽️</span><br>
+    <span class="eyebrow">Nutrition</span>
+    <h1>Diet Planner</h1>
+    <p class="page-sub">A sample day of meals built around your goal. Swap items to match your taste and macros.</p>
+  </div>
+</section>
 
-<div class="card">
-<h2>Lunch</h2>
-<p>Rice</p>
-<p>Chicken/Paneer</p>
-<p>Salad</p>
-</div>
+<section class="plan-section">
+  <div class="wrap narrow">
+    <span class="eyebrow">Choose a plan</span>
+    <div class="toggle-row" role="group" aria-label="Diet goal">
+      <button type="button" class="toggle-btn" data-plan="cut" id="planCutBtn">Cut</button>
+      <button type="button" class="toggle-btn" data-plan="maintain" id="planMaintainBtn">Maintain</button>
+      <button type="button" class="toggle-btn active" data-plan="bulk" id="planBulkBtn">Bulk</button>
+    </div>
+    <p class="plan-note" id="planNote"></p>
 
-<div class="card">
-<h2>Pre Workout</h2>
-<p>Banana</p>
-<p>Peanut Butter</p>
-</div>
+    <div class="tag-legend">
+      <span><i class="dot dot-protein" aria-hidden="true"></i>Protein</span>
+      <span><i class="dot dot-carbs" aria-hidden="true"></i>Carbs</span>
+      <span><i class="dot dot-fat" aria-hidden="true"></i>Fat</span>
+      <span><i class="dot dot-fiber" aria-hidden="true"></i>Fiber</span>
+      <span><i class="dot dot-supp" aria-hidden="true"></i>Supplement</span>
+    </div>
+  </div>
+</section>
 
-<div class="card">
-<h2>Post Workout</h2>
-<p>Protein Source</p>
-<p>Milk Shake</p>
-<p>Creatine (Optional)</p>
-</div>
+<section class="diet-section">
+  <div class="wrap narrow">
+    <span class="eyebrow">Diet type</span>
+    <div class="toggle-row" role="group" aria-label="Diet type">
+      <button type="button" class="toggle-btn active" data-diet="nonveg" id="dietNonVegBtn">
+        <i class="dot dot-nonveg" aria-hidden="true"></i>Non-Veg
+      </button>
+      <button type="button" class="toggle-btn" data-diet="veg" id="dietVegBtn">
+        <i class="dot dot-veg" aria-hidden="true"></i>Veg
+      </button>
+    </div>
+    <p class="diet-note" id="dietNote"></p>
+  </div>
+</section>
 
-<div class="card">
-<h2>Dinner</h2>
-<p>Chapati/Rice</p>
-<p>Paneer/Chicken</p>
-<p>Vegetables</p>
-</div>
+<main class="meal-section">
+  <div class="wrap">
+    <div class="meal-grid" id="mealGrid"></div>
+  </div>
+</main>
 
-<br>
-<a href="index.html">⬅ Back to Home</a>
+<section class="disclaimer-section">
+  <div class="wrap narrow">
+    <p class="disclaimer">This is a general meal structure to use as a starting point — adjust portions and swap foods to fit your taste, budget and any dietary needs. Consult a nutrition professional for a personalized plan.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">
+      <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+        <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+        <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+      </svg>
+      FitTrack Pro
+    </span>
+    <span>&copy; 2026 FitTrack Pro — Train smart. Track everything.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  var tagLabels = { protein:'Protein', carbs:'Carbs', fat:'Fat', fiber:'Fiber', supp:'Supplement' };
+
+  var plans = {
+    bulk: {
+      note: 'Calorie-dense meals to support muscle and weight gain.',
+      meals: [
+        { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
+            {veg:'Paneer Bhurji (150g)', nonveg:'4 Eggs', tag:'protein'},
+            {veg:'Oats', nonveg:'Oats', tag:'carbs'},
+            {veg:'Milk', nonveg:'Milk', tag:'protein'},
+            {veg:'Banana', nonveg:'Banana', tag:'carbs'}
+        ]},
+        { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
+            {veg:'Rice', nonveg:'Rice', tag:'carbs'},
+            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
+            {veg:'Salad', nonveg:'Salad', tag:'fiber'}
+        ]},
+        { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
+            {veg:'Banana', nonveg:'Banana', tag:'carbs'},
+            {veg:'Peanut Butter', nonveg:'Peanut Butter', tag:'fat'}
+        ]},
+        { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
+            {veg:'Protein Shake', nonveg:'Protein Shake', tag:'protein'},
+            {veg:'Milk', nonveg:'Milk', tag:'protein'},
+            {veg:'Creatine (optional)', nonveg:'Creatine (optional)', tag:'supp'}
+        ]},
+        { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
+            {veg:'Chapati / Rice', nonveg:'Chapati / Rice', tag:'carbs'},
+            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
+            {veg:'Vegetables', nonveg:'Vegetables', tag:'fiber'}
+        ]}
+      ]
+    },
+    maintain: {
+      note: 'A balanced day to hold steady while you build consistent habits.',
+      meals: [
+        { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
+            {veg:'Paneer Bhurji (100g)', nonveg:'3 Eggs', tag:'protein'},
+            {veg:'Oats', nonveg:'Oats', tag:'carbs'},
+            {veg:'Greek Yogurt', nonveg:'Greek Yogurt', tag:'protein'},
+            {veg:'Mixed Berries', nonveg:'Mixed Berries', tag:'fiber'}
+        ]},
+        { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
+            {veg:'Brown Rice', nonveg:'Brown Rice', tag:'carbs'},
+            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
+            {veg:'Salad', nonveg:'Salad', tag:'fiber'}
+        ]},
+        { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
+            {veg:'Apple', nonveg:'Apple', tag:'carbs'},
+            {veg:'Almonds', nonveg:'Almonds', tag:'fat'}
+        ]},
+        { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
+            {veg:'Protein Shake', nonveg:'Protein Shake', tag:'protein'},
+            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
+        ]},
+        { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
+            {veg:'Chapati (2)', nonveg:'Chapati (2)', tag:'carbs'},
+            {veg:'Tofu', nonveg:'Grilled Chicken', tag:'protein'},
+            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
+        ]}
+      ]
+    },
+    cut: {
+      note: 'Higher protein and fibre to stay full while in a calorie deficit.',
+      meals: [
+        { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
+            {veg:'Paneer Bhurji (low-fat, 100g)', nonveg:'4 Egg Whites + 1 Whole Egg', tag:'protein'},
+            {veg:'Oats (small portion)', nonveg:'Oats (small portion)', tag:'carbs'},
+            {veg:'Berries', nonveg:'Berries', tag:'fiber'}
+        ]},
+        { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
+            {veg:'Quinoa / Brown Rice (small)', nonveg:'Quinoa / Brown Rice (small)', tag:'carbs'},
+            {veg:'Grilled Paneer', nonveg:'Grilled Chicken', tag:'protein'},
+            {veg:'Large Salad', nonveg:'Large Salad', tag:'fiber'}
+        ]},
+        { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
+            {veg:'Black Coffee', nonveg:'Black Coffee', tag:'supp'},
+            {veg:'Apple', nonveg:'Apple', tag:'carbs'}
+        ]},
+        { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
+            {veg:'Protein Shake (low-carb)', nonveg:'Protein Shake (low-carb)', tag:'protein'},
+            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
+        ]},
+        { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
+            {veg:'Grilled Tofu / Paneer', nonveg:'Grilled Chicken / Fish', tag:'protein'},
+            {veg:'Large Salad / Vegetables', nonveg:'Large Salad / Vegetables', tag:'fiber'}
+        ]}
+      ]
+    }
+  };
+
+  var dietNotes = {
+    nonveg: 'Includes eggs, chicken &amp; fish for max protein density.',
+    veg: 'Vegetarian swaps — paneer, tofu &amp; dairy stand in for eggs, chicken &amp; fish.'
+  };
+
+  var mealGrid = document.getElementById('mealGrid');
+  var planNote = document.getElementById('planNote');
+  var dietNote = document.getElementById('dietNote');
+  var planCutBtn = document.getElementById('planCutBtn');
+  var planMaintainBtn = document.getElementById('planMaintainBtn');
+  var planBulkBtn = document.getElementById('planBulkBtn');
+  var dietNonVegBtn = document.getElementById('dietNonVegBtn');
+  var dietVegBtn = document.getElementById('dietVegBtn');
+
+  var currentPlan = 'bulk';
+  var currentDiet = 'nonveg';
+
+  function renderPlan(planKey, dietKey){
+    var plan = plans[planKey];
+    mealGrid.innerHTML = '';
+
+    plan.meals.forEach(function(meal){
+      var card = document.createElement('div');
+      card.className = 'meal-card';
+
+      var head = document.createElement('div');
+      head.className = 'meal-head';
+
+      var icon = document.createElement('span');
+      icon.className = 'meal-icon';
+      icon.setAttribute('aria-hidden','true');
+      icon.textContent = meal.icon;
+
+      var titleWrap = document.createElement('div');
+      var titleEl = document.createElement('h2');
+      titleEl.className = 'meal-title';
+      titleEl.textContent = meal.title;
+      var timeEl = document.createElement('span');
+      timeEl.className = 'meal-time';
+      timeEl.textContent = meal.time;
+      titleWrap.appendChild(titleEl);
+      titleWrap.appendChild(timeEl);
+
+      head.appendChild(icon);
+      head.appendChild(titleWrap);
+      card.appendChild(head);
+
+      var list = document.createElement('ul');
+      list.className = 'meal-foods';
+
+      meal.foods.forEach(function(food){
+        var li = document.createElement('li');
+        li.className = 'food-item';
+
+        var nameEl = document.createElement('span');
+        nameEl.className = 'food-name';
+        nameEl.textContent = food[dietKey];
+
+        var tagEl = document.createElement('span');
+        tagEl.className = 'food-tag tag-' + food.tag;
+        tagEl.textContent = tagLabels[food.tag];
+
+        li.appendChild(nameEl);
+        li.appendChild(tagEl);
+        list.appendChild(li);
+      });
+
+      card.appendChild(list);
+      mealGrid.appendChild(card);
+    });
+
+    planNote.textContent = plan.note;
+    dietNote.innerHTML = dietNotes[dietKey];
+
+    mealGrid.classList.remove('fade-in');
+    void mealGrid.offsetWidth;
+    mealGrid.classList.add('fade-in');
+  }
+
+  function setPlan(key){
+    currentPlan = key;
+    planCutBtn.classList.toggle('active', key === 'cut');
+    planMaintainBtn.classList.toggle('active', key === 'maintain');
+    planBulkBtn.classList.toggle('active', key === 'bulk');
+    renderPlan(currentPlan, currentDiet);
+  }
+
+  function setDiet(key){
+    currentDiet = key;
+    dietNonVegBtn.classList.toggle('active', key === 'nonveg');
+    dietVegBtn.classList.toggle('active', key === 'veg');
+    renderPlan(currentPlan, currentDiet);
+  }
+
+  planCutBtn.addEventListener('click', function(){ setPlan('cut'); });
+  planMaintainBtn.addEventListener('click', function(){ setPlan('maintain'); });
+  planBulkBtn.addEventListener('click', function(){ setPlan('bulk'); });
+  dietNonVegBtn.addEventListener('click', function(){ setDiet('nonveg'); });
+  dietVegBtn.addEventListener('click', function(){ setDiet('veg'); });
+
+  renderPlan(currentPlan, currentDiet);
+
+})();
+</script>
 
 </body>
 </html>
