@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="A sample day of meals for cutting, maintaining or bulking, built around your goal — FitTrack Pro.">
+<meta name="description" content="A sample day of meals with quantities, calories and macros for cutting, maintaining or bulking — FitTrack Pro.">
 <meta name="theme-color" content="#121214">
 <title>Diet Planner — FitTrack Pro</title>
 
@@ -135,6 +135,50 @@ a{ color:inherit; }
   color:var(--text-muted); font-size:0.92rem; max-width:480px; margin:0 auto;
 }
 
+/* ---------- daily totals ---------- */
+.totals-section{ padding:0 0 28px; }
+
+.totals-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px; max-width:560px; margin:0 auto;
+  box-shadow:0 1px 2px rgba(0,0,0,0.4);
+}
+
+.totals-top{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  flex-wrap:wrap; gap:14px; margin-bottom:18px;
+}
+
+.totals-kcal{
+  font-family:'Oswald',sans-serif; font-weight:700;
+  font-size:clamp(2.1rem,5.5vw,2.6rem); color:var(--accent); line-height:1;
+}
+.totals-kcal-label{
+  display:block; font-size:0.7rem; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--text-faint); margin-top:6px;
+}
+
+.totals-meta{ font-size:0.78rem; color:var(--text-faint); text-align:right; }
+
+.macro-bar{ display:flex; height:12px; border-radius:999px; overflow:hidden; background:var(--surface-strong); margin-bottom:14px; }
+.macro-seg{ transition:flex-basis 0.5s ease; }
+.macro-protein{ background:var(--m-protein); }
+.macro-carbs{ background:var(--m-carbs); }
+.macro-fat{ background:var(--m-fat); }
+
+.macro-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.macro-item{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  background:var(--surface-strong); border:1px solid var(--border); border-radius:10px; padding:10px 4px;
+}
+.macro-name{
+  display:flex; align-items:center; gap:6px; font-size:0.68rem;
+  text-transform:uppercase; letter-spacing:0.5px; color:var(--text-faint);
+}
+.macro-amount{ font-weight:700; font-family:'Oswald',sans-serif; font-size:0.95rem; }
+
+.totals-est-note{ margin-top:14px; font-size:0.74rem; color:var(--text-faint); text-align:center; }
+
 /* ---------- meal grid ---------- */
 .meal-section{ padding:14px 0 20px; }
 
@@ -165,10 +209,19 @@ a{ color:inherit; }
 
 .meal-foods{ list-style:none; }
 .food-item{
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
-  font-size:0.92rem; padding:9px 0; border-bottom:1px solid var(--border);
+  display:flex; flex-direction:column; gap:5px;
+  padding:10px 0; border-bottom:1px solid var(--border);
 }
 .meal-foods li:last-child{ border-bottom:none; padding-bottom:0; }
+
+.food-main{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  font-size:0.92rem;
+}
+
+.food-macros{
+  font-size:0.74rem; color:var(--text-faint); letter-spacing:0.1px;
+}
 
 .food-tag{
   font-size:0.66rem; font-weight:600; text-transform:uppercase; letter-spacing:0.4px;
@@ -179,6 +232,18 @@ a{ color:inherit; }
 .tag-fat{ background:rgba(52,211,153,0.15); color:var(--m-fat); border:1px solid rgba(52,211,153,0.35); }
 .tag-fiber{ background:rgba(167,139,250,0.15); color:var(--m-fiber); border:1px solid rgba(167,139,250,0.35); }
 .tag-supp{ background:var(--surface-strong); color:var(--text-muted); border:1px solid var(--border-strong); }
+
+.meal-total{
+  display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px 14px;
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--border-strong);
+}
+.meal-total-label{
+  font-size:0.68rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-faint);
+}
+.meal-total-kcal{
+  font-family:'Oswald',sans-serif; font-weight:700; font-size:0.95rem; color:var(--accent);
+}
+.meal-total-macros{ font-size:0.76rem; color:var(--text-muted); }
 
 .disclaimer-section{ padding:8px 0 50px; text-align:center; }
 .disclaimer{ font-size:0.78rem; color:var(--text-faint); max-width:520px; margin:0 auto; }
@@ -225,7 +290,7 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
     <span class="page-icon" aria-hidden="true">🍽️</span><br>
     <span class="eyebrow">Nutrition</span>
     <h1>Diet Planner</h1>
-    <p class="page-sub">A sample day of meals built around your goal. Swap items to match your taste and macros.</p>
+    <p class="page-sub">A sample day of meals built around your goal, with quantities, calories and macros for each item.</p>
   </div>
 </section>
 
@@ -264,6 +329,45 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
   </div>
 </section>
 
+<section class="totals-section">
+  <div class="wrap">
+    <div class="totals-card" aria-live="polite">
+      <span class="eyebrow">Daily totals</span>
+
+      <div class="totals-top">
+        <div>
+          <span class="totals-kcal" id="totalsKcal">&mdash;</span>
+          <span class="totals-kcal-label">Total calories</span>
+        </div>
+        <span class="totals-meta" id="totalsMeta"></span>
+      </div>
+
+      <div class="macro-bar">
+        <span class="macro-seg macro-protein" id="totalsProteinSeg"></span>
+        <span class="macro-seg macro-carbs" id="totalsCarbsSeg"></span>
+        <span class="macro-seg macro-fat" id="totalsFatSeg"></span>
+      </div>
+
+      <div class="macro-grid">
+        <div class="macro-item">
+          <span class="macro-name"><i class="dot dot-protein" aria-hidden="true"></i>Protein</span>
+          <span class="macro-amount" id="totalsProtein">&mdash;</span>
+        </div>
+        <div class="macro-item">
+          <span class="macro-name"><i class="dot dot-carbs" aria-hidden="true"></i>Carbs</span>
+          <span class="macro-amount" id="totalsCarbs">&mdash;</span>
+        </div>
+        <div class="macro-item">
+          <span class="macro-name"><i class="dot dot-fat" aria-hidden="true"></i>Fat</span>
+          <span class="macro-amount" id="totalsFat">&mdash;</span>
+        </div>
+      </div>
+
+      <p class="totals-est-note">Estimates based on standard portion sizes for the quantities listed below.</p>
+    </div>
+  </div>
+</section>
+
 <main class="meal-section">
   <div class="wrap">
     <div class="meal-grid" id="mealGrid"></div>
@@ -272,7 +376,7 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
 
 <section class="disclaimer-section">
   <div class="wrap narrow">
-    <p class="disclaimer">This is a general meal structure to use as a starting point — adjust portions and swap foods to fit your taste, budget and any dietary needs. Consult a nutrition professional for a personalized plan.</p>
+    <p class="disclaimer">This is a general meal structure to use as a starting point — calories and macros are estimates and will vary by brand, preparation and exact portion. Adjust to fit your taste, budget and any dietary needs, and consult a nutrition professional for a personalized plan.</p>
   </div>
 </section>
 
@@ -297,91 +401,111 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
 
   var tagLabels = { protein:'Protein', carbs:'Carbs', fat:'Fat', fiber:'Fiber', supp:'Supplement' };
 
+  function both(name, kcal, protein, carbs, fat){
+    var item = { name:name, kcal:kcal, protein:protein, carbs:carbs, fat:fat };
+    return { veg:item, nonveg:item };
+  }
+
   var plans = {
+
     bulk: {
       note: 'Calorie-dense meals to support muscle and weight gain.',
       meals: [
         { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
-            {veg:'Paneer Bhurji (150g)', nonveg:'4 Eggs', tag:'protein'},
-            {veg:'Oats', nonveg:'Oats', tag:'carbs'},
-            {veg:'Milk', nonveg:'Milk', tag:'protein'},
-            {veg:'Banana', nonveg:'Banana', tag:'carbs'}
-        ]},
+            { veg:{name:'Paneer Bhurji (150g)',kcal:320,protein:20,carbs:6,fat:24}, nonveg:{name:'4 Eggs',kcal:280,protein:24,carbs:2,fat:20}, tag:'protein' },
+            Object.assign(both('Oats (50g dry)', 190, 7, 33, 3), {tag:'carbs'}),
+            Object.assign(both('Milk (300ml)', 180, 10, 14, 9), {tag:'protein'}),
+            Object.assign(both('1 Banana', 105, 1, 27, 0), {tag:'carbs'})
+        ] },
+
         { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
-            {veg:'Rice', nonveg:'Rice', tag:'carbs'},
-            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
-            {veg:'Salad', nonveg:'Salad', tag:'fiber'}
-        ]},
+            Object.assign(both('Rice (2 cups cooked)', 400, 8, 88, 1), {tag:'carbs'}),
+            { veg:{name:'Paneer (150g)',kcal:375,protein:27,carbs:3,fat:29}, nonveg:{name:'Chicken Breast (200g)',kcal:330,protein:62,carbs:0,fat:7}, tag:'protein' },
+            Object.assign(both('Salad (1 bowl)', 60, 2, 10, 1), {tag:'fiber'})
+        ] },
+
         { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
-            {veg:'Banana', nonveg:'Banana', tag:'carbs'},
-            {veg:'Peanut Butter', nonveg:'Peanut Butter', tag:'fat'}
-        ]},
+            Object.assign(both('1 Banana', 105, 1, 27, 0), {tag:'carbs'}),
+            Object.assign(both('Peanut Butter (2 tbsp)', 190, 8, 6, 16), {tag:'fat'})
+        ] },
+
         { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
-            {veg:'Protein Shake', nonveg:'Protein Shake', tag:'protein'},
-            {veg:'Milk', nonveg:'Milk', tag:'protein'},
-            {veg:'Creatine (optional)', nonveg:'Creatine (optional)', tag:'supp'}
-        ]},
+            Object.assign(both('Protein Shake (1 scoop)', 120, 24, 3, 1), {tag:'protein'}),
+            Object.assign(both('Milk (250ml)', 150, 8, 12, 8), {tag:'protein'}),
+            Object.assign(both('Creatine (5g, optional)', 0, 0, 0, 0), {tag:'supp'})
+        ] },
+
         { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
-            {veg:'Chapati / Rice', nonveg:'Chapati / Rice', tag:'carbs'},
-            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
-            {veg:'Vegetables', nonveg:'Vegetables', tag:'fiber'}
-        ]}
+            Object.assign(both('Chapati (3) / Rice (1.5 cups)', 350, 9, 70, 4), {tag:'carbs'}),
+            { veg:{name:'Paneer (150g)',kcal:375,protein:27,carbs:3,fat:29}, nonveg:{name:'Chicken (200g)',kcal:330,protein:62,carbs:0,fat:7}, tag:'protein' },
+            Object.assign(both('Mixed Vegetables (1 cup)', 80, 3, 14, 1), {tag:'fiber'})
+        ] }
       ]
     },
+
     maintain: {
       note: 'A balanced day to hold steady while you build consistent habits.',
       meals: [
         { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
-            {veg:'Paneer Bhurji (100g)', nonveg:'3 Eggs', tag:'protein'},
-            {veg:'Oats', nonveg:'Oats', tag:'carbs'},
-            {veg:'Greek Yogurt', nonveg:'Greek Yogurt', tag:'protein'},
-            {veg:'Mixed Berries', nonveg:'Mixed Berries', tag:'fiber'}
-        ]},
+            { veg:{name:'Paneer Bhurji (100g)',kcal:210,protein:14,carbs:4,fat:16}, nonveg:{name:'3 Eggs',kcal:210,protein:18,carbs:2,fat:15}, tag:'protein' },
+            Object.assign(both('Oats (40g dry)', 150, 5, 27, 3), {tag:'carbs'}),
+            Object.assign(both('Greek Yogurt (150g)', 130, 15, 6, 5), {tag:'protein'}),
+            Object.assign(both('Mixed Berries (1/2 cup)', 40, 1, 10, 0), {tag:'fiber'})
+        ] },
+
         { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
-            {veg:'Brown Rice', nonveg:'Brown Rice', tag:'carbs'},
-            {veg:'Paneer', nonveg:'Chicken', tag:'protein'},
-            {veg:'Salad', nonveg:'Salad', tag:'fiber'}
-        ]},
+            Object.assign(both('Brown Rice (1.5 cups cooked)', 300, 6, 63, 2), {tag:'carbs'}),
+            { veg:{name:'Paneer (120g)',kcal:300,protein:22,carbs:3,fat:23}, nonveg:{name:'Chicken Breast (150g)',kcal:250,protein:46,carbs:0,fat:5}, tag:'protein' },
+            Object.assign(both('Salad (1 bowl)', 60, 2, 10, 1), {tag:'fiber'})
+        ] },
+
         { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
-            {veg:'Apple', nonveg:'Apple', tag:'carbs'},
-            {veg:'Almonds', nonveg:'Almonds', tag:'fat'}
-        ]},
+            Object.assign(both('1 Apple', 95, 1, 25, 0), {tag:'carbs'}),
+            Object.assign(both('Almonds (10-12 pcs)', 80, 3, 3, 7), {tag:'fat'})
+        ] },
+
         { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
-            {veg:'Protein Shake', nonveg:'Protein Shake', tag:'protein'},
-            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
-        ]},
+            Object.assign(both('Protein Shake (1 scoop)', 120, 24, 3, 1), {tag:'protein'}),
+            Object.assign(both('Steamed Vegetables (1 cup)', 60, 3, 11, 1), {tag:'fiber'})
+        ] },
+
         { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
-            {veg:'Chapati (2)', nonveg:'Chapati (2)', tag:'carbs'},
-            {veg:'Tofu', nonveg:'Grilled Chicken', tag:'protein'},
-            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
-        ]}
+            Object.assign(both('Chapati (2)', 200, 6, 38, 3), {tag:'carbs'}),
+            { veg:{name:'Tofu (150g)',kcal:180,protein:19,carbs:4,fat:10}, nonveg:{name:'Grilled Chicken (150g)',kcal:250,protein:46,carbs:0,fat:5}, tag:'protein' },
+            Object.assign(both('Steamed Vegetables (1 cup)', 60, 3, 11, 1), {tag:'fiber'})
+        ] }
       ]
     },
+
     cut: {
       note: 'Higher protein and fibre to stay full while in a calorie deficit.',
       meals: [
         { icon:'🌅', title:'Breakfast', time:'7:00 AM', foods:[
-            {veg:'Paneer Bhurji (low-fat, 100g)', nonveg:'4 Egg Whites + 1 Whole Egg', tag:'protein'},
-            {veg:'Oats (small portion)', nonveg:'Oats (small portion)', tag:'carbs'},
-            {veg:'Berries', nonveg:'Berries', tag:'fiber'}
-        ]},
+            { veg:{name:'Paneer Bhurji (low-fat, 100g)',kcal:160,protein:16,carbs:4,fat:9}, nonveg:{name:'4 Egg Whites + 1 Whole Egg',kcal:150,protein:21,carbs:2,fat:5}, tag:'protein' },
+            Object.assign(both('Oats (40g dry)', 150, 5, 27, 3), {tag:'carbs'}),
+            Object.assign(both('Mixed Berries (1/2 cup)', 40, 1, 10, 0), {tag:'fiber'})
+        ] },
+
         { icon:'🍛', title:'Lunch', time:'1:00 PM', foods:[
-            {veg:'Quinoa / Brown Rice (small)', nonveg:'Quinoa / Brown Rice (small)', tag:'carbs'},
-            {veg:'Grilled Paneer', nonveg:'Grilled Chicken', tag:'protein'},
-            {veg:'Large Salad', nonveg:'Large Salad', tag:'fiber'}
-        ]},
+            Object.assign(both('Quinoa / Brown Rice (1 cup cooked)', 220, 8, 40, 3), {tag:'carbs'}),
+            { veg:{name:'Grilled Paneer (120g)',kcal:280,protein:20,carbs:4,fat:21}, nonveg:{name:'Grilled Chicken Breast (150g)',kcal:250,protein:46,carbs:0,fat:5}, tag:'protein' },
+            Object.assign(both('Large Salad (2 bowls)', 100, 3, 16, 2), {tag:'fiber'})
+        ] },
+
         { icon:'⚡', title:'Pre-Workout', time:'5:00 PM', foods:[
-            {veg:'Black Coffee', nonveg:'Black Coffee', tag:'supp'},
-            {veg:'Apple', nonveg:'Apple', tag:'carbs'}
-        ]},
+            Object.assign(both('Black Coffee (unsweetened)', 5, 0, 1, 0), {tag:'supp'}),
+            Object.assign(both('1 Apple', 95, 1, 25, 0), {tag:'carbs'})
+        ] },
+
         { icon:'💪', title:'Post-Workout', time:'6:30 PM', foods:[
-            {veg:'Protein Shake (low-carb)', nonveg:'Protein Shake (low-carb)', tag:'protein'},
-            {veg:'Steamed Vegetables', nonveg:'Steamed Vegetables', tag:'fiber'}
-        ]},
+            Object.assign(both('Protein Shake (low-carb, 1 scoop)', 110, 24, 2, 1), {tag:'protein'}),
+            Object.assign(both('Steamed Vegetables (1 cup)', 60, 3, 11, 1), {tag:'fiber'})
+        ] },
+
         { icon:'🌙', title:'Dinner', time:'9:00 PM', foods:[
-            {veg:'Grilled Tofu / Paneer', nonveg:'Grilled Chicken / Fish', tag:'protein'},
-            {veg:'Large Salad / Vegetables', nonveg:'Large Salad / Vegetables', tag:'fiber'}
-        ]}
+            { veg:{name:'Grilled Tofu / Paneer (180g)',kcal:230,protein:22,carbs:5,fat:14}, nonveg:{name:'Grilled Chicken / Fish (200g)',kcal:310,protein:56,carbs:0,fat:8}, tag:'protein' },
+            Object.assign(both('Large Salad / Vegetables (2 bowls)', 100, 4, 17, 2), {tag:'fiber'})
+        ] }
       ]
     }
   };
@@ -400,12 +524,30 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
   var dietNonVegBtn = document.getElementById('dietNonVegBtn');
   var dietVegBtn = document.getElementById('dietVegBtn');
 
+  var totalsKcal = document.getElementById('totalsKcal');
+  var totalsMeta = document.getElementById('totalsMeta');
+  var totalsProtein = document.getElementById('totalsProtein');
+  var totalsCarbs = document.getElementById('totalsCarbs');
+  var totalsFat = document.getElementById('totalsFat');
+  var totalsProteinSeg = document.getElementById('totalsProteinSeg');
+  var totalsCarbsSeg = document.getElementById('totalsCarbsSeg');
+  var totalsFatSeg = document.getElementById('totalsFatSeg');
+
+  var planLabels = { cut:'Cut', maintain:'Maintain', bulk:'Bulk' };
+  var dietLabels = { veg:'Veg', nonveg:'Non-Veg' };
+
   var currentPlan = 'bulk';
   var currentDiet = 'nonveg';
+
+  function fmtMacros(p, c, f){
+    return p + 'g P &middot; ' + c + 'g C &middot; ' + f + 'g F';
+  }
 
   function renderPlan(planKey, dietKey){
     var plan = plans[planKey];
     mealGrid.innerHTML = '';
+
+    var dayTotal = { kcal:0, protein:0, carbs:0, fat:0 };
 
     plan.meals.forEach(function(meal){
       var card = document.createElement('div');
@@ -436,29 +578,91 @@ footer{ border-top:1px solid var(--border); padding:26px 0 34px; }
       var list = document.createElement('ul');
       list.className = 'meal-foods';
 
+      var mealTotal = { kcal:0, protein:0, carbs:0, fat:0 };
+
       meal.foods.forEach(function(food){
+        var data = food[dietKey];
+
+        mealTotal.kcal += data.kcal;
+        mealTotal.protein += data.protein;
+        mealTotal.carbs += data.carbs;
+        mealTotal.fat += data.fat;
+
         var li = document.createElement('li');
         li.className = 'food-item';
 
+        var main = document.createElement('div');
+        main.className = 'food-main';
+
         var nameEl = document.createElement('span');
         nameEl.className = 'food-name';
-        nameEl.textContent = food[dietKey];
+        nameEl.textContent = data.name;
 
         var tagEl = document.createElement('span');
         tagEl.className = 'food-tag tag-' + food.tag;
         tagEl.textContent = tagLabels[food.tag];
 
-        li.appendChild(nameEl);
-        li.appendChild(tagEl);
+        main.appendChild(nameEl);
+        main.appendChild(tagEl);
+
+        var macrosEl = document.createElement('div');
+        macrosEl.className = 'food-macros';
+        macrosEl.innerHTML = data.kcal + ' kcal &middot; ' + fmtMacros(data.protein, data.carbs, data.fat);
+
+        li.appendChild(main);
+        li.appendChild(macrosEl);
         list.appendChild(li);
       });
 
       card.appendChild(list);
+
+      var totalRow = document.createElement('div');
+      totalRow.className = 'meal-total';
+
+      var totalLabel = document.createElement('span');
+      totalLabel.className = 'meal-total-label';
+      totalLabel.textContent = 'Meal total';
+
+      var totalKcalEl = document.createElement('span');
+      totalKcalEl.className = 'meal-total-kcal';
+      totalKcalEl.textContent = Math.round(mealTotal.kcal) + ' kcal';
+
+      var totalMacrosEl = document.createElement('span');
+      totalMacrosEl.className = 'meal-total-macros';
+      totalMacrosEl.innerHTML = fmtMacros(Math.round(mealTotal.protein), Math.round(mealTotal.carbs), Math.round(mealTotal.fat));
+
+      totalRow.appendChild(totalLabel);
+      totalRow.appendChild(totalKcalEl);
+      totalRow.appendChild(totalMacrosEl);
+      card.appendChild(totalRow);
+
       mealGrid.appendChild(card);
+
+      dayTotal.kcal += mealTotal.kcal;
+      dayTotal.protein += mealTotal.protein;
+      dayTotal.carbs += mealTotal.carbs;
+      dayTotal.fat += mealTotal.fat;
     });
 
     planNote.textContent = plan.note;
     dietNote.innerHTML = dietNotes[dietKey];
+
+    totalsKcal.textContent = Math.round(dayTotal.kcal) + ' kcal';
+    totalsMeta.textContent = planLabels[planKey] + ' \u00b7 ' + dietLabels[dietKey];
+    totalsProtein.textContent = Math.round(dayTotal.protein) + 'g';
+    totalsCarbs.textContent = Math.round(dayTotal.carbs) + 'g';
+    totalsFat.textContent = Math.round(dayTotal.fat) + 'g';
+
+    var pCal = dayTotal.protein * 4;
+    var cCal = dayTotal.carbs * 4;
+    var fCal = dayTotal.fat * 9;
+    var macroCalSum = pCal + cCal + fCal;
+
+    if(macroCalSum > 0){
+      totalsProteinSeg.style.flexBasis = (pCal / macroCalSum * 100) + '%';
+      totalsCarbsSeg.style.flexBasis = (cCal / macroCalSum * 100) + '%';
+      totalsFatSeg.style.flexBasis = (fCal / macroCalSum * 100) + '%';
+    }
 
     mealGrid.classList.remove('fade-in');
     void mealGrid.offsetWidth;
