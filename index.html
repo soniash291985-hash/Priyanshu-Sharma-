@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="FitTrack Pro — track your BMI, calories, workouts, meals, weight and water, all from one dashboard.">
+<meta name="description" content="FitTrack Pro — track your BMI, calories, workouts, meals, weight and water, all from one free dashboard. No sign-up required.">
 <meta name="theme-color" content="#121214">
 <title>FitTrack Pro</title>
 
@@ -31,15 +31,8 @@
   --nav-h:68px;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
 
 body{
   font-family:'Inter',system-ui,sans-serif;
@@ -50,275 +43,161 @@ body{
   overflow-x:hidden;
 }
 
-img{
-  max-width:100%;
-  height:auto;
-  display:block;
-}
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
 
-a{
-  color:inherit;
-}
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+.wrap.narrow{ max-width:640px; }
 
-.wrap{
-  max-width:1140px;
-  margin:0 auto;
-  padding:0 24px;
-}
-
-@media (min-width:1024px){
-  .wrap{ padding:0 40px; }
-}
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
 
 /* ---------- navbar ---------- */
 .navbar{
-  position:sticky;
-  top:0;
-  z-index:50;
-  height:var(--nav-h);
-  display:flex;
-  align-items:center;
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
   background:rgba(18,18,20,0.78);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--border);
 }
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.brand{ display:inline-flex; align-items:center; gap:10px; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
 
-.navbar-inner{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.brand{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-}
-
-.brand-mark{
-  color:var(--accent);
-  display:inline-flex;
-}
-
-.brand-word{
-  font-family:'Oswald',sans-serif;
-  font-weight:700;
-  font-size:1.05rem;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-.brand-word .pro{
-  color:var(--accent);
-  margin-left:4px;
-}
+.nav-links{ display:none; gap:28px; font-size:0.85rem; font-weight:500; color:var(--text-muted); }
+.nav-links a{ text-decoration:none; color:inherit; transition:color 0.2s ease; }
+.nav-links a:hover{ color:var(--text); }
+@media (min-width:768px){ .nav-links{ display:flex; align-items:center; } }
 
 .nav-cta{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  font-size:0.82rem;
-  font-weight:600;
-  letter-spacing:0.3px;
-  text-decoration:none;
-  color:var(--text-muted);
-  border:1px solid var(--border-strong);
-  border-radius:999px;
-  padding:8px 16px;
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px; flex-shrink:0;
   transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
-
-.nav-cta:hover,
-.nav-cta:focus-visible{
-  color:var(--text);
-  border-color:var(--accent-border);
-  background:var(--accent-soft);
-}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
 
 /* ---------- hero ---------- */
-.hero{
-  background:radial-gradient(circle at 80% 20%,var(--accent-soft),transparent 55%);
-}
+.hero{ background:radial-gradient(circle at 80% 20%,var(--accent-soft),transparent 55%); }
 
 .hero-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:36px;
-  padding:48px 0 56px;
-  text-align:center;
-  justify-items:center;
+  display:grid; grid-template-columns:1fr; gap:36px;
+  padding:48px 0 48px; text-align:center; justify-items:center;
 }
 
-.hero-text{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  max-width:520px;
-}
+.hero-text{ display:flex; flex-direction:column; align-items:center; max-width:540px; }
 
 .eyebrow{
-  display:inline-block;
-  font-family:'Oswald',sans-serif;
-  font-size:0.74rem;
-  font-weight:600;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--accent);
-  margin-bottom:14px;
+  display:inline-block; font-family:'Oswald',sans-serif; font-size:0.74rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:14px;
 }
 
 .hero-text h1{
-  font-family:'Oswald',sans-serif;
-  font-weight:700;
-  font-size:clamp(2.1rem,5vw,3.2rem);
-  line-height:1.12;
-  letter-spacing:0.2px;
-  margin-bottom:16px;
+  font-family:'Oswald',sans-serif; font-weight:700;
+  font-size:clamp(2.2rem,5.5vw,3.4rem); line-height:1.1;
+  letter-spacing:0.5px; text-transform:uppercase; margin-bottom:16px;
 }
 
-.hero-desc{
-  color:var(--text-muted);
-  font-size:1rem;
-  margin-bottom:26px;
-}
+.hero-desc{ color:var(--text-muted); font-size:1rem; margin-bottom:28px; }
+
+.hero-ctas{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; justify-content:center; }
 
 .cta-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:var(--accent);
-  color:#15151a;
-  font-weight:700;
-  letter-spacing:0.4px;
-  text-transform:uppercase;
-  font-size:0.85rem;
-  padding:15px 30px;
-  border-radius:9px;
-  text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--accent); color:#15151a; font-weight:700;
+  letter-spacing:0.4px; text-transform:uppercase; font-size:0.85rem;
+  padding:15px 30px; border-radius:9px; text-decoration:none;
   box-shadow:0 10px 24px rgba(255,75,43,0.28);
   transition:transform 0.2s ease, box-shadow 0.2s ease;
 }
+.cta-btn:hover, .cta-btn:focus-visible{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(255,75,43,0.4); }
+.cta-btn:focus-visible{ outline:2px solid var(--accent-light); outline-offset:3px; }
 
-.cta-btn:hover,
-.cta-btn:focus-visible{
-  transform:translateY(-2px);
-  box-shadow:0 14px 30px rgba(255,75,43,0.4);
+.cta-secondary{
+  font-size:0.85rem; font-weight:600; color:var(--text-muted); text-decoration:none;
+  border-bottom:1px solid var(--border-strong); padding-bottom:3px;
+  transition:color 0.2s ease, border-color 0.2s ease;
 }
+.cta-secondary:hover, .cta-secondary:focus-visible{ color:var(--accent); border-color:var(--accent); }
 
-.cta-btn:focus-visible{
-  outline:2px solid var(--accent-light);
-  outline-offset:3px;
-}
-
-.hero-visual{
-  display:flex;
-  justify-content:center;
-}
-
-.hero-frame{
-  position:relative;
-  display:inline-block;
-  animation:float 4s ease-in-out infinite;
-}
-
+.hero-visual{ display:flex; justify-content:center; }
+.hero-frame{ position:relative; display:inline-block; animation:float 4s ease-in-out infinite; }
 .hero-frame img{
-  width:100%;
-  max-width:300px;
-  border-radius:16px;
-  border:1px solid var(--border-strong);
-  box-shadow:0 16px 36px rgba(0,0,0,0.5);
+  width:100%; max-width:300px; border-radius:16px;
+  border:1px solid var(--border-strong); box-shadow:0 16px 36px rgba(0,0,0,0.5);
 }
 
-.reticle{
-  position:absolute;
-  width:26px;
-  height:26px;
-  pointer-events:none;
-}
-
+.reticle{ position:absolute; width:26px; height:26px; pointer-events:none; }
 .reticle.tl{ top:-9px; left:-9px; border-top:3px solid var(--accent); border-left:3px solid var(--accent); border-radius:6px 0 0 0; }
 .reticle.tr{ top:-9px; right:-9px; border-top:3px solid var(--accent); border-right:3px solid var(--accent); border-radius:0 6px 0 0; }
 .reticle.bl{ bottom:-9px; left:-9px; border-bottom:3px solid var(--accent); border-left:3px solid var(--accent); border-radius:0 0 0 6px; }
 .reticle.br{ bottom:-9px; right:-9px; border-bottom:3px solid var(--accent); border-right:3px solid var(--accent); border-radius:0 0 6px 0; }
 
 @media (min-width:1024px){
-  .hero-grid{
-    grid-template-columns:1.05fr 0.95fr;
-    align-items:center;
-    text-align:left;
-    justify-items:stretch;
-    padding:84px 0 96px;
-    gap:64px;
-  }
-  .hero-text{
-    align-items:flex-start;
-    max-width:none;
-  }
-  .hero-visual{
-    justify-content:flex-end;
-  }
-  .hero-frame img{
-    max-width:420px;
-  }
+  .hero-grid{ grid-template-columns:1.05fr 0.95fr; align-items:center; text-align:left; justify-items:stretch; padding:80px 0 60px; gap:64px; }
+  .hero-text{ align-items:flex-start; max-width:none; }
+  .hero-ctas{ justify-content:flex-start; }
+  .hero-visual{ justify-content:flex-end; }
+  .hero-frame img{ max-width:400px; }
 }
+
+/* ---------- stats row ---------- */
+.stats-section{ border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.stats-row{ display:grid; grid-template-columns:repeat(2,1fr); gap:24px 16px; padding:32px 0; text-align:center; }
+@media (min-width:640px){ .stats-row{ grid-template-columns:repeat(4,1fr); } }
+.stat-num{ font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(1.7rem,4vw,2.3rem); color:var(--accent); line-height:1; }
+.stat-label{ display:block; margin-top:6px; font-size:0.76rem; color:var(--text-muted); letter-spacing:0.3px; text-transform:uppercase; }
+
+/* ---------- ticker ---------- */
+.ticker-section{ overflow:hidden; background:var(--bg-soft); border-bottom:1px solid var(--border); padding:14px 0; }
+.ticker-track{ display:flex; width:max-content; animation:tickerScroll 28s linear infinite; }
+.ticker-item{
+  display:inline-flex; align-items:center; padding:0 24px;
+  font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:600;
+  letter-spacing:0.6px; text-transform:uppercase; color:var(--text-muted); white-space:nowrap;
+}
+.ticker-dot{ color:var(--accent); padding:0 8px; font-size:0.7rem; }
+
+@keyframes tickerScroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ---------- generic section head ---------- */
+.section-head{ text-align:center; max-width:560px; margin:0 auto 34px; }
+.section-title{
+  font-family:'Oswald',sans-serif; font-weight:600;
+  font-size:clamp(1.6rem,3vw,2.1rem); letter-spacing:0.2px; margin-bottom:10px;
+}
+.section-sub{ color:var(--text-muted); font-size:0.95rem; }
+
+/* ---------- features ---------- */
+.features-section{ padding:60px 0; }
+.feature-grid{ display:grid; grid-template-columns:1fr; gap:18px; }
+@media (min-width:640px){ .feature-grid{ grid-template-columns:repeat(2,1fr); } }
+
+.feature-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+.feature-icon{
+  width:42px; height:42px; border-radius:10px; background:var(--accent-soft);
+  display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:14px;
+}
+.feature-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1.02rem; margin-bottom:6px; }
+.feature-desc{ font-size:0.88rem; color:var(--text-muted); }
 
 /* ---------- tools section ---------- */
-.tools-section{
-  padding:8px 0 64px;
-  scroll-margin-top:var(--nav-h);
-}
+.tools-section{ padding:8px 0 64px; scroll-margin-top:var(--nav-h); }
 
-.tools-head{
-  text-align:center;
-  max-width:520px;
-  margin:0 auto 34px;
-}
-
-.section-title{
-  font-family:'Oswald',sans-serif;
-  font-weight:600;
-  font-size:clamp(1.6rem,3vw,2.1rem);
-  letter-spacing:0.2px;
-  margin-bottom:10px;
-}
-
-.section-sub{
-  color:var(--text-muted);
-  font-size:0.95rem;
-}
-
-.tool-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-}
-
-@media (min-width:640px){
-  .tool-grid{ grid-template-columns:repeat(2,1fr); }
-}
-
-@media (min-width:1024px){
-  .tool-grid{ grid-template-columns:repeat(3,1fr); gap:20px; }
-}
+.tool-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
+@media (min-width:640px){ .tool-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1024px){ .tool-grid{ grid-template-columns:repeat(3,1fr); gap:20px; } }
 
 .tool-card{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:14px;
-
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:18px;
-
-  text-decoration:none;
-  color:var(--text);
-
+  position:relative; display:flex; align-items:center; gap:14px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px;
+  text-decoration:none; color:var(--text);
   box-shadow:0 1px 2px rgba(0,0,0,0.4);
   transition:transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-
   animation:slideUp 0.7s ease both;
 }
 
@@ -329,149 +208,90 @@ a{
 .tool-grid .tool-card:nth-child(5){ animation-delay:0.20s; }
 .tool-grid .tool-card:nth-child(6){ animation-delay:0.24s; }
 
-.tool-card::before,
-.tool-card::after{
-  content:"";
-  position:absolute;
-  width:14px;
-  height:14px;
-  opacity:0;
+.tool-card::before, .tool-card::after{
+  content:""; position:absolute; width:14px; height:14px; opacity:0;
   transition:opacity 0.25s ease, transform 0.25s ease;
 }
+.tool-card::before{ top:6px; left:6px; border-top:2px solid var(--accent); border-left:2px solid var(--accent); transform:translate(-4px,-4px); }
+.tool-card::after{ bottom:6px; right:6px; border-bottom:2px solid var(--accent); border-right:2px solid var(--accent); transform:translate(4px,4px); }
 
-.tool-card::before{
-  top:6px; left:6px;
-  border-top:2px solid var(--accent);
-  border-left:2px solid var(--accent);
-  transform:translate(-4px,-4px);
-}
-
-.tool-card::after{
-  bottom:6px; right:6px;
-  border-bottom:2px solid var(--accent);
-  border-right:2px solid var(--accent);
-  transform:translate(4px,4px);
-}
-
-.tool-card:hover,
-.tool-card:focus-visible{
-  transform:translateY(-3px);
-  border-color:var(--accent-border);
-  background:var(--surface-strong);
-}
-
-.tool-card:hover::before,
-.tool-card:hover::after,
-.tool-card:focus-visible::before,
-.tool-card:focus-visible::after{
-  opacity:1;
-  transform:translate(0,0);
-}
-
-.tool-card:focus-visible{
-  outline:2px solid var(--accent);
-  outline-offset:2px;
-}
+.tool-card:hover, .tool-card:focus-visible{ transform:translateY(-3px); border-color:var(--accent-border); background:var(--surface-strong); }
+.tool-card:hover::before, .tool-card:hover::after,
+.tool-card:focus-visible::before, .tool-card:focus-visible::after{ opacity:1; transform:translate(0,0); }
+.tool-card:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
 .tool-icon{
-  flex-shrink:0;
-  width:42px;
-  height:42px;
-  border-radius:10px;
-  background:var(--accent-soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
+  flex-shrink:0; width:42px; height:42px; border-radius:10px; background:var(--accent-soft);
+  display:flex; align-items:center; justify-content:center; font-size:19px;
 }
+.tool-text{ display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+.tool-title{ font-weight:600; font-size:0.98rem; }
+.tool-desc{ font-size:0.82rem; color:var(--text-muted); }
 
-.tool-text{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  flex:1;
-  min-width:0;
-}
+.arrow{ font-size:18px; color:var(--text-faint); transition:transform 0.25s ease, color 0.25s ease; }
+.tool-card:hover .arrow, .tool-card:focus-visible .arrow{ color:var(--accent); transform:translateX(4px); }
 
-.tool-title{
-  font-weight:600;
-  font-size:0.98rem;
-}
+/* ---------- how it works ---------- */
+.steps-section{ padding:60px 0; scroll-margin-top:var(--nav-h); }
+.steps-grid{ display:grid; grid-template-columns:1fr; gap:32px; }
+@media (min-width:768px){ .steps-grid{ grid-template-columns:repeat(3,1fr); } }
 
-.tool-desc{
-  font-size:0.82rem;
-  color:var(--text-muted);
+.step-card{ text-align:center; padding:0 12px; }
+.step-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:48px; height:48px; border-radius:50%;
+  background:var(--accent-soft); border:1px solid var(--accent-border);
+  color:var(--accent); font-family:'Oswald',sans-serif; font-weight:700; font-size:1.1rem;
+  margin-bottom:16px;
 }
+.step-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:1.05rem; margin-bottom:8px; }
+.step-desc{ font-size:0.9rem; color:var(--text-muted); }
 
-.arrow{
-  font-size:18px;
-  color:var(--text-faint);
-  transition:transform 0.25s ease, color 0.25s ease;
+/* ---------- faq ---------- */
+.faq-section{ padding:8px 0 60px; scroll-margin-top:var(--nav-h); }
+.faq-list{ max-width:680px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+.faq-item{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:4px 20px; }
+.faq-item summary{
+  cursor:pointer; list-style:none; padding:16px 0; font-weight:600; font-size:0.95rem;
+  display:flex; justify-content:space-between; align-items:center; gap:14px;
 }
-
-.tool-card:hover .arrow,
-.tool-card:focus-visible .arrow{
-  color:var(--accent);
-  transform:translateX(4px);
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{
+  content:"+"; font-size:1.3rem; color:var(--accent); flex-shrink:0;
+  transition:transform 0.2s ease;
 }
+.faq-item[open] summary::after{ transform:rotate(45deg); }
+.faq-answer{ padding:0 0 16px; color:var(--text-muted); font-size:0.9rem; }
 
 /* ---------- footer ---------- */
-footer{
-  border-top:1px solid var(--border);
-  padding:26px 0 34px;
-}
+footer{ border-top:1px solid var(--border); }
+.footer-grid{ display:grid; grid-template-columns:1fr; gap:32px; padding:48px 0 28px; }
+@media (min-width:768px){ .footer-grid{ grid-template-columns:1.3fr 1fr 1fr; } }
 
-.footer-inner{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
-  text-align:center;
-  color:var(--text-faint);
-  font-size:0.85rem;
-}
+.footer-brand{ display:inline-flex; align-items:center; gap:8px; color:var(--text); font-family:'Oswald',sans-serif; font-size:0.95rem; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+.footer-brand svg{ color:var(--accent); }
+.footer-tagline{ font-size:0.85rem; color:var(--text-muted); max-width:280px; }
 
-.footer-brand{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:var(--text-muted);
-  font-family:'Oswald',sans-serif;
-  font-size:0.85rem;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
+.footer-col h3{ font-family:'Oswald',sans-serif; font-size:0.74rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-faint); margin-bottom:14px; }
+.footer-links{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-links a{ font-size:0.88rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s ease; }
+.footer-links a:hover{ color:var(--accent); }
+.footer-about-text{ font-size:0.85rem; color:var(--text-muted); }
 
-.footer-brand svg{
-  color:var(--accent);
+.footer-bottom{
+  border-top:1px solid var(--border); padding:20px 0;
+  display:flex; flex-direction:column; gap:8px; align-items:center; text-align:center;
+  font-size:0.8rem; color:var(--text-faint);
 }
-
-@media (min-width:768px){
-  .footer-inner{
-    flex-direction:row;
-    justify-content:space-between;
-    text-align:left;
-  }
-}
+@media (min-width:768px){ .footer-bottom{ flex-direction:row; justify-content:space-between; text-align:left; } }
 
 /* ---------- motion ---------- */
-@keyframes slideUp{
-  from{ opacity:0; transform:translateY(20px); }
-  to{ opacity:1; transform:translateY(0); }
-}
-
-@keyframes float{
-  0%{ transform:translateY(0); }
-  50%{ transform:translateY(-10px); }
-  100%{ transform:translateY(0); }
-}
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes float{ 0%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } 100%{ transform:translateY(0); } }
 
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
-  *{
-    animation:none !important;
-    transition:none !important;
-  }
+  *{ animation:none !important; transition:none !important; }
 }
 
 </style>
@@ -493,6 +313,13 @@ footer{
       </span>
       <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
     </div>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#tools">Tools</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
     <a class="nav-cta" href="#tools">View tools <span aria-hidden="true">↓</span></a>
   </div>
 </header>
@@ -502,9 +329,12 @@ footer{
 
     <div class="hero-text">
       <span class="eyebrow">All-in-one fitness dashboard</span>
-      <h1>Train with data,<br>not guesswork.</h1>
-      <p class="hero-desc">FitTrack Pro brings your BMI, calories, workouts, meals, weight and water into one dashboard, so every decision is backed by your own numbers.</p>
-      <a class="cta-btn" href="#tools">Choose a tracker <span aria-hidden="true">→</span></a>
+      <h1>Train with data.<br>Not guesswork.</h1>
+      <p class="hero-desc">FitTrack Pro brings your BMI, calories, workouts, meals, weight and water into one dashboard — track everything, guess nothing.</p>
+      <div class="hero-ctas">
+        <a class="cta-btn" href="#tools">Start tracking <span aria-hidden="true">→</span></a>
+        <a class="cta-secondary" href="#how-it-works">See how it works</a>
+      </div>
     </div>
 
     <div class="hero-visual">
@@ -520,11 +350,88 @@ footer{
   </div>
 </section>
 
+<section class="stats-section">
+  <div class="wrap stats-row">
+    <div>
+      <span class="stat-num">6</span>
+      <span class="stat-label">Tracking tools</span>
+    </div>
+    <div>
+      <span class="stat-num">100%</span>
+      <span class="stat-label">Free to use</span>
+    </div>
+    <div>
+      <span class="stat-num">0</span>
+      <span class="stat-label">Sign-ups required</span>
+    </div>
+    <div>
+      <span class="stat-num">24/7</span>
+      <span class="stat-label">Available anytime</span>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-section" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">BMI Calculator</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Calorie &amp; Macro Calculator</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Workout Planner</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Diet Planner</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Weight Tracker</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Water Tracker</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">100% Free</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">No Sign-Up Needed</span><span class="ticker-dot">●</span>
+
+    <span class="ticker-item">BMI Calculator</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Calorie &amp; Macro Calculator</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Workout Planner</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Diet Planner</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Weight Tracker</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">Water Tracker</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">100% Free</span><span class="ticker-dot">●</span>
+    <span class="ticker-item">No Sign-Up Needed</span><span class="ticker-dot">●</span>
+  </div>
+</div>
+
 <main>
+
+  <section class="features-section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Why FitTrack Pro</span>
+        <h2 class="section-title">Built for consistency, not just numbers</h2>
+        <p class="section-sub">A few small decisions that make tracking something you'll actually keep doing.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🗂️</span>
+          <h3 class="feature-title">All-in-one dashboard</h3>
+          <p class="feature-desc">Six tools, one place — stop juggling separate apps and spreadsheets to track your fitness.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">📊</span>
+          <h3 class="feature-title">See your progress, not just numbers</h3>
+          <p class="feature-desc">Visual gauges and breakdowns show where you stand at a glance, instead of a wall of digits.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🎯</span>
+          <h3 class="feature-title">Built around your goal</h3>
+          <p class="feature-desc">Plans adjust for cutting, maintaining or bulking — no one-size-fits-all results.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" aria-hidden="true">⚡</span>
+          <h3 class="feature-title">Nothing to install</h3>
+          <p class="feature-desc">Works straight in your browser. No account, no download, no waiting around.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="tools-section" id="tools">
     <div class="wrap">
 
-      <div class="tools-head">
+      <div class="section-head">
         <span class="eyebrow">Your toolkit</span>
         <h2 class="section-title">Six trackers. One dashboard.</h2>
         <p class="section-sub">Jump into whichever you need today.</p>
@@ -590,21 +497,104 @@ footer{
 
     </div>
   </section>
+
+  <section class="steps-section" id="how-it-works">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Getting started</span>
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">No setup. No forms. Just answers.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">1</span>
+          <h3 class="step-title">Pick a tracker</h3>
+          <p class="step-desc">Choose from BMI, calories, workouts, diet, weight or water — whatever you need today.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">2</span>
+          <h3 class="step-title">Enter your numbers</h3>
+          <p class="step-desc">A few quick fields. No account, no setup, no waiting on anything to load.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-num">3</span>
+          <h3 class="step-title">Get instant results</h3>
+          <p class="step-desc">See your result immediately, with a visual breakdown instead of just a raw number.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Questions</span>
+        <h2 class="section-title">Frequently asked</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Do I need to create an account?</summary>
+          <p class="faq-answer">No. FitTrack Pro runs entirely in your browser — open any tool and start using it right away.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is my data saved anywhere?</summary>
+          <p class="faq-answer">Not yet. Each calculator works with the numbers you enter in that session; nothing is stored or sent anywhere.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Are these results medical advice?</summary>
+          <p class="faq-answer">No. These tools use standard formulas (like Mifflin&ndash;St Jeor for calories) as general estimates. Always consult a professional for personalized guidance.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is FitTrack Pro really free?</summary>
+          <p class="faq-answer">Yes, completely. Every tool is free to use, with no sign-up or subscription required.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
-  <div class="wrap footer-inner">
-    <span class="footer-brand">
-      <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
-        <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
-        <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
-        <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
-        <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
-      </svg>
-      FitTrack Pro
-    </span>
-    <span>&copy; 2026 FitTrack Pro — Train smart. Track everything.</span>
+  <div class="wrap footer-grid">
+
+    <div class="footer-col">
+      <span class="footer-brand">
+        <svg width="22" height="10" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+        FitTrack Pro
+      </span>
+      <p class="footer-tagline">Train with data, not guesswork. Six free tools, no sign-up required.</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Tools</h3>
+      <ul class="footer-links">
+        <li><a href="bmi.html">BMI Calculator</a></li>
+        <li><a href="calories.html">Calorie Calculator</a></li>
+        <li><a href="workout.html">Workout Planner</a></li>
+        <li><a href="diet.html">Diet Planner</a></li>
+        <li><a href="weight.html">Weight Tracker</a></li>
+        <li><a href="water.html">Water Tracker</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>About</h3>
+      <p class="footer-about-text">FitTrack Pro is a free set of fitness calculators and planners. Results are general estimates, not personalized medical or nutrition advice.</p>
+    </div>
+
+  </div>
+
+  <div class="wrap footer-bottom">
+    <span>&copy; 2026 FitTrack Pro</span>
+    <span>Train smart. Track everything.</span>
   </div>
 </footer>
 
