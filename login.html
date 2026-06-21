@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Log in or create your free FitTrack Pro account to save your progress across BMI, calories, workouts, meals, weight and water tracking.">
+<meta name="theme-color" content="#121214">
+<title>Log In — FitTrack Pro</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#121214;
+  --bg-soft:#1a1b1f;
+  --surface:#1c1e23;
+  --surface-strong:#22242b;
+  --border:#2b2e35;
+  --border-strong:#3a3e48;
+  --accent:#ff4b2b;
+  --accent-light:#ff7a57;
+  --accent-soft:rgba(255,75,43,0.12);
+  --accent-border:rgba(255,75,43,0.45);
+  --text:#f5f3ef;
+  --text-muted:#a3a5ac;
+  --text-faint:#6c6e76;
+  --radius:12px;
+  --nav-h:68px;
+  --good:#3ddc84;
+  --warn:#ffb648;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:linear-gradient(180deg,var(--bg),var(--bg-soft));
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.55;
+  overflow-x:hidden;
+}
+
+img{ max-width:100%; height:auto; display:block; }
+a{ color:inherit; }
+button{ font-family:inherit; }
+
+.wrap{ max-width:1140px; margin:0 auto; padding:0 24px; }
+@media (min-width:1024px){ .wrap{ padding:0 40px; } }
+
+/* ---------- navbar (same as index) ---------- */
+.navbar{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  display:flex; align-items:center;
+  background:rgba(18,18,20,0.78);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.navbar-inner{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.brand{ display:inline-flex; align-items:center; gap:10px; text-decoration:none; }
+.brand-mark{ color:var(--accent); display:inline-flex; }
+.brand-word{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:1px; text-transform:uppercase; color:var(--text); }
+.brand-word .pro{ color:var(--accent); margin-left:4px; }
+
+.nav-cta{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.82rem; font-weight:600; letter-spacing:0.3px;
+  text-decoration:none; color:var(--text-muted);
+  border:1px solid var(--border-strong); border-radius:999px;
+  padding:8px 16px; flex-shrink:0;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.nav-cta:hover, .nav-cta:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+/* ---------- auth layout ---------- */
+.auth-section{
+  background:radial-gradient(circle at 80% 10%,var(--accent-soft),transparent 55%);
+  min-height:calc(100vh - var(--nav-h));
+  display:flex; align-items:center;
+  padding:40px 0 56px;
+}
+
+.auth-grid{
+  display:grid; grid-template-columns:1fr; gap:36px; align-items:center;
+}
+@media (min-width:1024px){
+  .auth-grid{ grid-template-columns:1fr 0.95fr; gap:64px; }
+}
+
+/* ---------- auth card ---------- */
+.auth-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:32px 28px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.4);
+  max-width:440px;
+  margin:0 auto;
+  width:100%;
+  animation:slideUp 0.6s ease both;
+}
+@media (min-width:480px){ .auth-card{ padding:40px 36px; } }
+
+.auth-eyebrow{ font-family:'Oswald',sans-serif; font-size:0.74rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:10px; display:block; }
+.auth-heading{ font-family:'Oswald',sans-serif; font-weight:700; font-size:1.7rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+.auth-subhead{ color:var(--text-muted); font-size:0.9rem; margin-bottom:26px; }
+
+/* tabs */
+.auth-tabs{
+  display:grid; grid-template-columns:1fr 1fr; gap:6px;
+  background:var(--bg-soft); border:1px solid var(--border); border-radius:10px;
+  padding:4px; margin-bottom:26px;
+}
+.auth-tab{
+  border:none; background:transparent; color:var(--text-muted);
+  font-weight:600; font-size:0.85rem; padding:10px 8px; border-radius:7px;
+  cursor:pointer; transition:background 0.2s ease, color 0.2s ease;
+}
+.auth-tab[aria-selected="true"]{ background:var(--accent); color:#15151a; }
+.auth-tab:focus-visible{ outline:2px solid var(--accent-light); outline-offset:2px; }
+
+/* social buttons */
+.social-row{ display:flex; flex-direction:column; gap:10px; margin-bottom:22px; }
+.social-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:12px 16px; border-radius:9px;
+  border:1px solid var(--border-strong); background:var(--surface-strong);
+  color:var(--text); font-weight:600; font-size:0.88rem; cursor:pointer;
+  transition:border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.social-btn:hover, .social-btn:focus-visible{ border-color:var(--accent-border); background:#272a32; transform:translateY(-1px); }
+.social-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.social-btn svg{ flex-shrink:0; }
+.social-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+.social-btn:disabled:hover{ border-color:var(--border-strong); background:var(--surface-strong); transform:none; }
+.social-btn-badge{
+  font-size:0.66rem; font-weight:700; letter-spacing:0.4px; text-transform:uppercase;
+  background:var(--border-strong); color:var(--text-faint); padding:2px 7px; border-radius:999px; margin-left:2px;
+}
+
+.divider{ display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--text-faint); font-size:0.78rem; letter-spacing:0.4px; text-transform:uppercase; }
+.divider::before, .divider::after{ content:""; flex:1; height:1px; background:var(--border); }
+
+/* form */
+.auth-form{ display:flex; flex-direction:column; gap:16px; }
+.form-group{ display:flex; flex-direction:column; gap:6px; }
+.form-group label{ font-size:0.8rem; font-weight:600; color:var(--text-muted); }
+.form-group input{
+  background:var(--bg-soft); border:1px solid var(--border-strong); border-radius:9px;
+  color:var(--text); font-size:0.92rem; padding:12px 14px; outline:none;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+.form-group input::placeholder{ color:var(--text-faint); }
+.form-group input:focus{ border-color:var(--accent); background:var(--surface-strong); }
+
+.password-wrap{ position:relative; display:flex; }
+.password-wrap input{ flex:1; padding-right:44px; }
+.toggle-visibility{
+  position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  background:none; border:none; color:var(--text-faint); cursor:pointer;
+  padding:8px; display:flex; align-items:center; justify-content:center;
+  border-radius:6px; transition:color 0.2s ease;
+}
+.toggle-visibility:hover, .toggle-visibility:focus-visible{ color:var(--accent); }
+.toggle-visibility:focus-visible{ outline:2px solid var(--accent); outline-offset:1px; }
+
+/* strength meter */
+.strength-meter{ display:none; flex-direction:column; gap:6px; margin-top:-6px; }
+.strength-meter.is-visible{ display:flex; }
+.strength-track{ height:5px; border-radius:4px; background:var(--border); overflow:hidden; }
+.strength-fill{ height:100%; width:0%; border-radius:4px; background:var(--border-strong); transition:width 0.25s ease, background 0.25s ease; }
+.strength-label{ font-size:0.74rem; color:var(--text-faint); letter-spacing:0.2px; }
+
+/* goal chips (signup only) */
+.goal-field{ display:none; flex-direction:column; gap:8px; }
+.goal-field.is-visible{ display:flex; }
+.goal-chips{ display:flex; gap:8px; flex-wrap:wrap; }
+.goal-chip{
+  border:1px solid var(--border-strong); background:var(--bg-soft); color:var(--text-muted);
+  font-size:0.8rem; font-weight:600; padding:9px 14px; border-radius:999px; cursor:pointer;
+  transition:border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.goal-chip[aria-pressed="true"]{ border-color:var(--accent-border); background:var(--accent-soft); color:var(--accent-light); }
+.goal-chip:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+.signup-only{ display:none; }
+.signup-only.is-visible{ display:flex; flex-direction:column; gap:16px; }
+
+/* options row */
+.form-options{ display:flex; align-items:center; justify-content:space-between; font-size:0.82rem; color:var(--text-muted); flex-wrap:wrap; gap:10px; }
+.remember-me{ display:flex; align-items:center; gap:8px; }
+.remember-me input{ width:15px; height:15px; accent-color:var(--accent); }
+.forgot-link{ color:var(--text-muted); text-decoration:none; border-bottom:1px solid var(--border-strong); padding-bottom:2px; transition:color 0.2s ease, border-color 0.2s ease; }
+.forgot-link:hover, .forgot-link:focus-visible{ color:var(--accent); border-color:var(--accent); }
+
+.submit-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--accent); color:#15151a; font-weight:700;
+  letter-spacing:0.4px; text-transform:uppercase; font-size:0.85rem;
+  padding:14px 24px; border-radius:9px; border:none; cursor:pointer;
+  box-shadow:0 10px 24px rgba(255,75,43,0.28); margin-top:4px;
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.submit-btn:hover, .submit-btn:focus-visible{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(255,75,43,0.4); }
+.submit-btn:focus-visible{ outline:2px solid var(--accent-light); outline-offset:3px; }
+
+.form-status{
+  font-size:0.78rem; color:var(--text-faint); text-align:center;
+  opacity:0; max-height:0; overflow:hidden; transition:opacity 0.3s ease;
+}
+.form-status.is-visible{ opacity:1; max-height:60px; margin-top:2px; }
+.form-status.is-error{ color:var(--accent-light); }
+.form-status.is-success{ color:var(--good); }
+
+/* ---------- shared: logged-in nav chip ----------
+   Used wherever auth.js finds #auth-nav-slot (this page, index.html, and
+   every tool page once you copy this block into their <style>). */
+.user-chip{ display:flex; align-items:center; gap:10px; }
+.user-avatar{ width:30px; height:30px; border-radius:50%; object-fit:cover; border:1px solid var(--border-strong); }
+.user-avatar-fallback{
+  display:flex; align-items:center; justify-content:center;
+  background:var(--accent-soft); color:var(--accent-light);
+  font-family:'Oswald',sans-serif; font-weight:700; font-size:0.8rem;
+}
+.user-name{ font-size:0.85rem; font-weight:600; color:var(--text); max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.user-logout{
+  background:none; border:1px solid var(--border-strong); color:var(--text-muted);
+  font-size:0.76rem; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer;
+  transition:color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.user-logout:hover, .user-logout:focus-visible{ color:var(--text); border-color:var(--accent-border); background:var(--accent-soft); }
+
+.guest-link{
+  display:block; text-align:center; font-size:0.82rem; font-weight:600;
+  color:var(--text-muted); text-decoration:none; margin-top:18px;
+  border-top:1px solid var(--border); padding-top:18px;
+  transition:color 0.2s ease;
+}
+.guest-link:hover, .guest-link:focus-visible{ color:var(--accent); }
+
+.switch-text{ text-align:center; font-size:0.84rem; color:var(--text-muted); margin-top:14px; }
+.switch-text button{ background:none; border:none; color:var(--accent); font-weight:600; cursor:pointer; padding:0; font-size:inherit; }
+.switch-text button:hover, .switch-text button:focus-visible{ text-decoration:underline; }
+
+/* ---------- right visual panel ---------- */
+.auth-visual{ display:flex; flex-direction:column; gap:20px; align-items:center; }
+@media (min-width:1024px){ .auth-visual{ align-items:flex-end; } }
+
+.visual-card{
+  position:relative; width:100%; max-width:380px;
+  background:var(--surface); border:1px solid var(--border-strong); border-radius:16px;
+  padding:28px; box-shadow:0 16px 36px rgba(0,0,0,0.5);
+  animation:float 4s ease-in-out infinite;
+}
+.reticle{ position:absolute; width:24px; height:24px; pointer-events:none; }
+.reticle.tl{ top:-8px; left:-8px; border-top:3px solid var(--accent); border-left:3px solid var(--accent); border-radius:6px 0 0 0; }
+.reticle.tr{ top:-8px; right:-8px; border-top:3px solid var(--accent); border-right:3px solid var(--accent); border-radius:0 6px 0 0; }
+.reticle.bl{ bottom:-8px; left:-8px; border-bottom:3px solid var(--accent); border-left:3px solid var(--accent); border-radius:0 0 0 6px; }
+.reticle.br{ bottom:-8px; right:-8px; border-bottom:3px solid var(--accent); border-right:3px solid var(--accent); border-radius:0 0 6px 0; }
+
+.gauge-row{ display:flex; align-items:center; gap:18px; margin-bottom:22px; }
+.gauge-label{ display:flex; flex-direction:column; gap:4px; }
+.gauge-title{ font-family:'Oswald',sans-serif; font-weight:600; font-size:0.92rem; }
+.gauge-sub{ font-size:0.78rem; color:var(--text-muted); }
+
+.quote-block{ border-top:1px solid var(--border); padding-top:18px; min-height:78px; }
+.quote-eyebrow{ font-family:'Oswald',sans-serif; font-size:0.68rem; font-weight:600; letter-spacing:1.6px; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:block; }
+.quote-text{ font-size:0.95rem; color:var(--text); transition:opacity 0.35s ease; line-height:1.5; }
+.quote-dots{ display:flex; gap:6px; margin-top:14px; }
+.quote-dots span{ width:6px; height:6px; border-radius:50%; background:var(--border-strong); transition:background 0.3s ease; }
+.quote-dots span.is-active{ background:var(--accent); }
+
+.visual-footnote{ font-size:0.8rem; color:var(--text-faint); text-align:center; max-width:300px; }
+
+/* ---------- motion ---------- */
+@keyframes slideUp{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+@keyframes float{ 0%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } 100%{ transform:translateY(0); } }
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *{ animation:none !important; transition:none !important; }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="wrap navbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="30" height="14" viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+          <rect x="8" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="14" y="10" width="36" height="4" rx="2" fill="currentColor"/>
+          <rect x="52" y="6" width="4" height="12" rx="1" fill="currentColor"/>
+          <rect x="58" y="9" width="6" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-word">FITTRACK<span class="pro">PRO</span></span>
+    </a>
+    <a class="nav-cta" href="index.html"><span aria-hidden="true">←</span> Back to home</a>
+  </div>
+</header>
+
+<main class="auth-section">
+  <div class="wrap auth-grid">
+
+    <!-- ===== AUTH CARD ===== -->
+    <div class="auth-card">
+
+      <span class="auth-eyebrow">Welcome back</span>
+      <h1 class="auth-heading" id="auth-heading">Log in</h1>
+      <p class="auth-subhead" id="auth-subhead">Pick up your tracking right where you left off.</p>
+
+      <div class="auth-tabs" role="tablist" aria-label="Choose login or sign up">
+        <button class="auth-tab" id="tab-login" role="tab" aria-selected="true" type="button">Log in</button>
+        <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" type="button">Create account</button>
+      </div>
+
+      <div class="social-row">
+        <button class="social-btn" type="button" id="google-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.95v2.33A9 9 0 0 0 9 18z" fill="#34A853"/>
+            <path d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.17.28-1.7V4.97H.95A9 9 0 0 0 0 9c0 1.45.35 2.83.95 4.03l3-2.33z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .95 4.97l3 2.33C4.66 5.17 6.65 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+        <button class="social-btn" type="button" id="apple-btn" disabled aria-disabled="true" title="Requires an Apple Developer account — add yours to enable this">
+          <svg width="16" height="18" viewBox="0 0 16 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.1 9.55c-.02-2.1 1.72-3.1 1.8-3.16-1-1.44-2.54-1.64-3.08-1.66-1.31-.13-2.56.77-3.23.77-.66 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.1-1.49 2.58-.38 6.39 1.06 8.48.71 1.02 1.55 2.16 2.65 2.12 1.07-.04 1.47-.68 2.76-.68 1.28 0 1.65.68 2.78.66 1.15-.02 1.88-1.03 2.58-2.06.81-1.18 1.15-2.32 1.16-2.38-.03-.01-2.21-.85-2.23-3.36z" fill="currentColor"/>
+            <path d="M11.05 3.27c.59-.71.98-1.7.87-2.69-.84.03-1.86.56-2.47 1.26-.55.62-1.03 1.62-.9 2.58.94.07 1.9-.47 2.5-1.15z" fill="currentColor"/>
+          </svg>
+          Continue with Apple <span class="social-btn-badge">Coming soon</span>
+        </button>
+      </div>
+
+      <div class="divider">or use your email</div>
+
+      <form class="auth-form" id="auth-form">
+
+        <div class="form-group signup-only" id="name-field">
+          <label for="full-name">Full name</label>
+          <input type="text" id="full-name" name="full-name" placeholder="Alex Morgan" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="toggle-visibility" data-target="password" aria-label="Show password">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="strength-meter" id="strength-meter">
+            <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+            <span class="strength-label" id="strength-label">Password strength</span>
+          </div>
+        </div>
+
+        <div class="signup-only" id="confirm-field">
+          <div class="form-group">
+            <label for="confirm-password">Confirm password</label>
+            <div class="password-wrap">
+              <input type="password" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" autocomplete="new-password">
+              <button type="button" class="toggle-visibility" data-target="confirm-password" aria-label="Show password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="goal-field is-visible">
+            <label>What's your goal?</label>
+            <div class="goal-chips" id="goal-chips">
+              <button type="button" class="goal-chip" data-goal="cut" aria-pressed="false">Cutting</button>
+              <button type="button" class="goal-chip" data-goal="maintain" aria-pressed="false">Maintaining</button>
+              <button type="button" class="goal-chip" data-goal="bulk" aria-pressed="false">Bulking</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-options" id="login-options">
+          <label class="remember-me"><input type="checkbox" name="remember" id="remember-me" checked> Remember me</label>
+          <a class="forgot-link" href="#" id="forgot-link">Forgot password?</a>
+        </div>
+
+        <button class="submit-btn" type="submit" id="submit-btn">Log in</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <a class="guest-link" href="index.html">Continue as guest — no account needed</a>
+
+      <p class="switch-text" id="switch-text">
+        Don't have an account? <button type="button" id="switch-to-signup">Create one</button>
+      </p>
+
+    </div>
+
+    <!-- ===== VISUAL PANEL ===== -->
+    <div class="auth-visual">
+      <div class="visual-card">
+        <span class="reticle tl" aria-hidden="true"></span>
+        <span class="reticle tr" aria-hidden="true"></span>
+        <span class="reticle bl" aria-hidden="true"></span>
+        <span class="reticle br" aria-hidden="true"></span>
+
+        <div class="gauge-row">
+          <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="var(--border)" stroke-width="7"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"
+              stroke-dasharray="163.4" stroke-dashoffset="55" transform="rotate(-90 32 32)"/>
+            <text x="32" y="37" text-anchor="middle" font-family="Oswald, sans-serif" font-weight="700" font-size="15" fill="var(--text)">66%</text>
+          </svg>
+          <div class="gauge-label">
+            <span class="gauge-title">Today's progress</span>
+            <span class="gauge-sub">Calories, water &amp; workout combined</span>
+          </div>
+        </div>
+
+        <div class="quote-block">
+          <span class="quote-eyebrow">Daily reminder</span>
+          <p class="quote-text" id="quote-text">Consistency beats intensity — small logged days add up faster than perfect ones.</p>
+          <div class="quote-dots" id="quote-dots"></div>
+        </div>
+      </div>
+
+      <p class="visual-footnote">Your dashboard, stats and history will live here once you're logged in.</p>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBauTpHOQNzSmdgfqsh2jWYgtlOpqZ58Io",
+  authDomain: "websitegym-1b618.firebaseapp.com",
+  projectId: "websitegym-1b618",
+  storageBucket: "websitegym-1b618.firebasestorage.app",
+  messagingSenderId: "333825916817",
+  appId: "1:333825916817:web:851fabd502d820233ea430"
+};
+
+firebase.initializeApp(firebaseConfig);
+window.auth = firebase.auth();
+</script>
+
+<script src="auth.js"></script>
+
+<script>
+(function(){
+
+  // ---------- tab switching ----------
+  var tabLogin = document.getElementById('tab-login');
+  var tabSignup = document.getElementById('tab-signup');
+  var heading = document.getElementById('auth-heading');
+  var subhead = document.getElementById('auth-subhead');
+  var submitBtn = document.getElementById('submit-btn');
+  var loginOptions = document.getElementById('login-options');
+  var switchText = document.getElementById('switch-text');
+  var switchToSignup = document.getElementById('switch-to-signup');
+  var signupOnlyEls = document.querySelectorAll('.signup-only');
+  var goalField = document.querySelector('.goal-field');
+  var confirmInput = document.getElementById('confirm-password');
+  var nameInput = document.getElementById('full-name');
+  var passwordInput = document.getElementById('password');
+  var strengthMeter = document.getElementById('strength-meter');
+
+  function setMode(mode){
+    var isSignup = mode === 'signup';
+    tabLogin.setAttribute('aria-selected', String(!isSignup));
+    tabSignup.setAttribute('aria-selected', String(isSignup));
+
+    signupOnlyEls.forEach(function(el){ el.classList.toggle('is-visible', isSignup); });
+    nameInput.required = isSignup;
+    confirmInput.required = isSignup;
+    strengthMeter.classList.toggle('is-visible', isSignup);
+
+    if(isSignup){
+      heading.textContent = 'Create your account';
+      subhead.textContent = 'Free forever. Save your progress across every tool.';
+      submitBtn.textContent = 'Create account';
+      loginOptions.style.display = 'none';
+      switchText.innerHTML = 'Already have an account? <button type="button" id="switch-to-login">Log in</button>';
+      document.getElementById('switch-to-login').addEventListener('click', function(){ setMode('login'); });
+    } else {
+      heading.textContent = 'Log in';
+      subhead.textContent = 'Pick up your tracking right where you left off.';
+      submitBtn.textContent = 'Log in';
+      loginOptions.style.display = 'flex';
+      switchText.innerHTML = "Don't have an account? <button type=\"button\" id=\"switch-to-signup\">Create one</button>";
+      document.getElementById('switch-to-signup').addEventListener('click', function(){ setMode('signup'); });
+    }
+  }
+
+  tabLogin.addEventListener('click', function(){ setMode('login'); });
+  tabSignup.addEventListener('click', function(){ setMode('signup'); });
+  switchToSignup.addEventListener('click', function(){ setMode('signup'); });
+
+  // ---------- password visibility ----------
+  document.querySelectorAll('.toggle-visibility').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-target'));
+      var isHidden = target.type === 'password';
+      target.type = isHidden ? 'text' : 'password';
+      btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+      btn.style.color = isHidden ? 'var(--accent)' : '';
+    });
+  });
+
+  // ---------- password strength ----------
+  var fill = document.getElementById('strength-fill');
+  var label = document.getElementById('strength-label');
+
+  passwordInput.addEventListener('input', function(){
+    var val = passwordInput.value;
+    var score = 0;
+    if(val.length >= 8) score++;
+    if(/[A-Z]/.test(val)) score++;
+    if(/[0-9]/.test(val)) score++;
+    if(/[^A-Za-z0-9]/.test(val)) score++;
+
+    var pct = (score / 4) * 100;
+    var colors = ['var(--border-strong)', '#ff5b3d', 'var(--warn)', 'var(--warn)', 'var(--good)'];
+    var labels = ['Password strength', 'Weak', 'Fair', 'Good', 'Strong'];
+
+    fill.style.width = val.length ? Math.max(pct, 12) + '%' : '0%';
+    fill.style.background = colors[score];
+    label.textContent = val.length ? labels[score] : 'Password strength';
+  });
+
+  // ---------- goal chips ----------
+  document.querySelectorAll('.goal-chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      document.querySelectorAll('.goal-chip').forEach(function(c){ c.setAttribute('aria-pressed', 'false'); });
+      chip.setAttribute('aria-pressed', 'true');
+    });
+  });
+
+  // ---------- form submit / social click / forgot password ----------
+  var status = document.getElementById('form-status');
+  var rememberCheckbox = document.getElementById('remember-me');
+  var emailInput = document.getElementById('email');
+
+  function showStatus(msg, type){
+    status.textContent = msg;
+    status.className = 'form-status is-visible' + (type ? ' is-' + type : '');
+  }
+
+  function setBusy(busy){
+    submitBtn.disabled = busy;
+    document.getElementById('google-btn').disabled = busy;
+    submitBtn.style.opacity = busy ? '0.7' : '';
+  }
+
+  // If someone is already logged in, send them straight to the dashboard
+  // instead of showing the login form again.
+  auth.onAuthStateChanged(function(user){
+    if(user){ window.location.href = 'index.html'; }
+  });
+
+  document.getElementById('google-btn').addEventListener('click', function(){
+    setBusy(true);
+    setAuthPersistence(true) // social sign-in always stays permanent
+      .then(signInWithGoogle)
+      .then(function(){ window.location.href = 'index.html'; })
+      .catch(function(err){ setBusy(false); showStatus(friendlyAuthError(err), 'error'); });
+  });
+
+  document.getElementById('forgot-link').addEventListener('click', function(e){
+    e.preventDefault();
+    var email = emailInput.value.trim();
+    if(!email){
+      showStatus('Enter your email above first, then click "Forgot password?" again.', 'error');
+      emailInput.focus();
+      return;
+    }
+    resetPassword(email)
+      .then(function(){ showStatus('Password reset email sent to ' + email + ' — check your inbox.', 'success'); })
+      .catch(function(err){ showStatus(friendlyAuthError(err), 'error'); });
+  });
+
+  document.getElementById('auth-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var isSignup = tabSignup.getAttribute('aria-selected') === 'true';
+    var email = emailInput.value.trim();
+    var password = passwordInput.value;
+
+    if(isSignup){
+      var name = nameInput.value.trim();
+      var confirm = confirmInput.value;
+      if(password !== confirm){
+        showStatus("Passwords don't match.", 'error');
+        return;
+      }
+      setBusy(true);
+      setAuthPersistence(true)
+        .then(function(){ return signUpWithEmail(name, email, password); })
+        .then(function(){ window.location.href = 'index.html'; })
+        .catch(function(err){ setBusy(false); showStatus(friendlyAuthError(err), 'error'); });
+    } else {
+      setBusy(true);
+      setAuthPersistence(rememberCheckbox.checked)
+        .then(function(){ return signInWithEmail(email, password); })
+        .then(function(){ window.location.href = 'index.html'; })
+        .catch(function(err){ setBusy(false); showStatus(friendlyAuthError(err), 'error'); });
+    }
+  });
+
+  // ---------- rotating quotes ----------
+  var quotes = [
+    "Consistency beats intensity — small logged days add up faster than perfect ones.",
+    "You don't need a perfect plan. You need a tracked one.",
+    "Drink water now — your future self during that 4pm slump will thank you.",
+    "Progress isn't always the scale. Check your trend, not your today.",
+    "The best workout plan is the one you actually log."
+  ];
+
+  var quoteText = document.getElementById('quote-text');
+  var dotsWrap = document.getElementById('quote-dots');
+  var current = 0;
+
+  quotes.forEach(function(_, i){
+    var dot = document.createElement('span');
+    if(i === 0) dot.classList.add('is-active');
+    dotsWrap.appendChild(dot);
+  });
+
+  function rotateQuote(){
+    current = (current + 1) % quotes.length;
+    quoteText.style.opacity = 0;
+    setTimeout(function(){
+      quoteText.textContent = quotes[current];
+      quoteText.style.opacity = 1;
+      Array.from(dotsWrap.children).forEach(function(d, i){
+        d.classList.toggle('is-active', i === current);
+      });
+    }, 350);
+  }
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduceMotion){
+    setInterval(rotateQuote, 4500);
+  }
+
+})();
+</script>
+
+</body>
+</html>
