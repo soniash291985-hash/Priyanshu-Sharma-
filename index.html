@@ -320,7 +320,9 @@ footer{ border-top:1px solid var(--border); }
       <a href="#faq">FAQ</a>
     </nav>
 
-    <a class="nav-cta" href="#tools">View tools <span aria-hidden="true">↓</span></a>
+    <span id="auth-nav-slot">
+  <a class="nav-cta" href="login.html">Log in</a>
+</span>
   </div>
 </header>
 
@@ -597,6 +599,26 @@ footer{ border-top:1px solid var(--border); }
     <span>Train smart. Track everything.</span>
   </div>
 </footer>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBauTpHOQNzSmdgfqsh2jWYgtlOpqZ58Io",
+  authDomain: "websitegym-1b618.firebaseapp.com",
+  projectId: "websitegym-1b618",
+  storageBucket: "websitegym-1b618.firebasestorage.app",
+  messagingSenderId: "333825916817",
+  appId: "1:333825916817:web:851fabd502d820233ea430"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+window.auth = firebase.auth();
+</script>
+
+<script src="auth.js"></script>
 </body>
 </html>
